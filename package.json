@@ -1,0 +1,13 @@
+{
+  "name": "mindcare-ner",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/*"
+  ],
+  "scripts": {
+    "frontend": "npm run start --workspace=frontend",
+    "backend": "npm run dev --workspace=backend"
+  }
+}
