@@ -1,10 +1,447 @@
 // use prisma-8
-
+// USER
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  username  String?
-  name      String?
-  createdAt TimestamptzString @default(now())
-  updatedAt temporal.updatedAtString()
+  id                Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+  fullName          String @map("full_name")
+  phone             String?
+  email             String @unique
+  role              String
+  passwordHash      String @map("password_hash")
+  preferredLanguage String? @map("preferred_language")
+
+  createdAt         TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt         TimestamptzString(6) @default(now()) @map("updated_at")
+
+  // A patient account can have one Patient profile.
+  patientProfile    Patient?
+
+  // A caregiver User can be linked to many patients.
+  caregiverPatients CaregiverPatient[] @relation("CaregiverPatients")
+
+  dailyCareLogs     DailyCareLog[] @relation("CaregiverDailyCareLogs")
+
+  devices           Device[] @relation("CaregiverDevices")
+
+  @@map("app_users")
+}
+
+
+// PATIENT
+model Patient {
+  id                    Uuid      @id @default(dbgenerated("gen_random_uuid()"))
+  userId                Uuid?     @unique @map("user_id")
+
+  patientCode           String    @map("patient_code")
+  displayName           String    @map("display_name")
+  dateOfBirth           DateString? @map("date_of_birth")
+  gender                String?
+  primaryLanguage       String?   @map("primary_language")
+
+  state                 String?
+  district              String?
+  village               String?
+
+  dementiaStage         String?   @map("dementia_stage")
+
+  emergencyContactName  String?   @map("emergency_contact_name")
+  emergencyContactPhone String?   @map("emergency_contact_phone")
+
+  consentStatus         String?   @default("pending") @map("consent_status")
+
+  createdAt             TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt             TimestamptzString(6) @default(now()) @map("updated_at")
+  deletedAt             TimestamptzString(6)? @map("deleted_at")
+
+  user                  User?     @relation(fields: [userId], references: [id])
+
+  caregiverPatients     CaregiverPatient[]
+  memoryJournalEntries  MemoryJournal[]
+
+  cognitivePerformance  CognitivePerformance[]
+  dailyCareLogs         DailyCareLog[]
+  devices               Device[]
+  gameSessions          GameSession[]
+  medicationLogs        MedicationLog[]
+  medications           Medication[] @relation("PatientMedications")
+  safetyCheckins        SafetyCheckin[]
+
+  @@map("patients")
+}
+
+
+// CAREGIVER ↔ PATIENT
+model CaregiverPatient {
+  id           Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  caregiverId  Uuid   @map("caregiver_id")
+  patientId    Uuid   @map("patient_id")
+
+  relationship String?
+
+  isPrimary    Boolean @default(false) @map("is_primary")
+
+  createdAt    TimestamptzString(6) @default(now()) @map("created_at")
+
+  caregiver    User    @relation(
+    "CaregiverPatients",
+    fields: [caregiverId],
+    references: [id]
+  )
+
+  patient      Patient @relation(
+    fields: [patientId],
+    references: [id]
+  )
+
+  @@unique([caregiverId, patientId])
+  @@map("caregiver_patients")
+}
+
+
+// COGNITIVE PERFORMANCE
+model CognitivePerformance {
+  id                Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  patientId         Uuid   @map("patient_id")
+  sessionId         Uuid?  @map("session_id")
+
+  cognitiveDomain   String  @map("cognitive_domain")
+
+  score             Decimal?
+  accuracyPercent   Decimal? @map("accuracy_percent")
+  averageResponseMs Int?     @map("average_response_ms")
+  errorRate         Decimal? @map("error_rate")
+  difficultyLevel   Int?     @map("difficulty_level")
+
+  measuredAt        TimestamptzString(6) @default(now()) @map("measured_at")
+
+  patient           Patient      @relation(fields: [patientId], references: [id])
+  session           GameSession? @relation(fields: [sessionId], references: [id])
+
+  @@map("cognitive_performance")
+}
+
+
+// CULTURAL CONTENT
+model CulturalContent {
+  id           Uuid    @id @default(dbgenerated("gen_random_uuid()"))
+
+  title        String
+  category     String
+  region       String?
+  languageCode String? @map("language_code")
+  description  String?
+
+  metadata     Json?   @default("{}")
+
+  createdAt    TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt    TimestamptzString(6) @default(now()) @map("updated_at")
+  deletedAt    TimestamptzString(6)? @map("deleted_at")
+
+  gameItems    GameItem[]
+  mediaAssets  MediaAsset[]
+
+  @@map("cultural_content")
+}
+
+
+// DAILY CARE LOG
+model DailyCareLog {
+  id           Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  patientId    Uuid   @map("patient_id")
+  caregiverId  Uuid?  @map("caregiver_id")
+
+  mood         String?
+  hydrationMl  Int?      @map("hydration_ml")
+  mealsCompleted Int?    @map("meals_completed")
+  sleepHours   Decimal?
+  notes        String?
+
+  createdAt    TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt    TimestamptzString(6) @default(now()) @map("updated_at")
+
+  patient      Patient @relation(
+    fields: [patientId],
+    references: [id]
+  )
+
+  caregiver    User? @relation(
+    "CaregiverDailyCareLogs",
+    fields: [caregiverId],
+    references: [id]
+  )
+
+  @@map("daily_care_logs")
+}
+
+
+// DEVICE
+model Device {
+  id          Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  deviceId    String  @map("device_id")
+  deviceName  String? @map("device_name")
+  platform    String?
+  appVersion  String?
+
+  patientId   Uuid?   @map("patient_id")
+  caregiverId Uuid?   @map("caregiver_id")
+
+  lastSyncAt  TimestamptzString(6)? @map("last_sync_at")
+
+  createdAt   TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt   TimestamptzString(6) @default(now()) @map("updated_at")
+
+  patient     Patient? @relation(
+    fields: [patientId],
+    references: [id]
+  )
+
+  caregiver   User? @relation(
+    "CaregiverDevices",
+    fields: [caregiverId],
+    references: [id]
+  )
+
+  @@map("devices")
+}
+
+
+// GAME
+model Game {
+  id              Uuid @id @default(dbgenerated("gen_random_uuid()"))
+  name            String
+  gameType        String @map("game_type")
+  cognitiveDomain String? @map("cognitive_domain")
+  difficultyMin   Int @default(1) @map("difficulty_min")
+  difficultyMax   Int @default(5) @map("difficulty_max")
+  languageCode    String? @map("language_code")
+  isActive        Boolean @default(true) @map("is_active")
+  createdAt       TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt       TimestamptzString(6) @default(now()) @map("updated_at")
+
+  gameItems       GameItem[]
+  gameSessions    GameSession[]
+
+  @@map("games")
+}
+
+
+// GAME ITEM
+model GameItem {
+  id                Uuid    @id @default(dbgenerated("gen_random_uuid()"))
+
+  gameId            Uuid    @map("game_id")
+  culturalContentId Uuid?   @map("cultural_content_id")
+
+  questionText      String? @map("question_text")
+  difficulty        Int     @default(1)
+
+  correctAnswer     String? @map("correct_answer")
+
+  options           Json?   @default("[]")
+  mediaIds          Json?   @default("[]")
+  metadata          Json?   @default("{}")
+
+  isActive          Boolean @default(true) @map("is_active")
+
+  createdAt         TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt         TimestamptzString(6) @default(now()) @map("updated_at")
+  deletedAt         TimestamptzString(6)? @map("deleted_at")
+
+  game              Game             @relation(fields: [gameId], references: [id])
+  culturalContent   CulturalContent? @relation(fields: [culturalContentId], references: [id])
+  gameResponses     GameResponse[]
+
+  @@map("game_items")
+}
+
+
+// GAME RESPONSE
+model GameResponse {
+  id                  Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  sessionId           Uuid   @map("session_id")
+  gameItemId          Uuid   @map("game_item_id")
+
+  questionNumber      Int?   @map("question_number")
+  answerGiven         String? @map("answer_given")
+
+  isCorrect           Boolean? @map("is_correct")
+
+  responseTimeMs      Int?   @map("response_time_ms")
+  hesitationMs        Int?   @map("hesitation_ms")
+  difficultyAtAttempt Int?   @map("difficulty_at_attempt")
+
+  createdAt           TimestamptzString(6) @default(now()) @map("created_at")
+
+  session             GameSession @relation(fields: [sessionId], references: [id])
+  gameItem            GameItem    @relation(fields: [gameItemId], references: [id])
+
+  @@map("game_responses")
+}
+
+
+// GAME SESSION
+model GameSession {
+  id                Uuid @id @default(dbgenerated("gen_random_uuid()"))
+  patientId         Uuid @map("patient_id")
+  gameId            Uuid @map("game_id")
+  deviceId          String? @map("device_id")
+  startedAt         TimestamptzString(6) @default(now()) @map("started_at")
+  completedAt       TimestamptzString(6)?
+  initialDifficulty Int? @map("initial_difficulty")
+  finalDifficulty   Int? @map("final_difficulty")
+  totalQuestions    Int? @default(0) @map("total_questions")
+  correctAnswers    Int? @default(0) @map("correct_answers")
+  averageResponseMs Int? @map("average_response_ms")
+  moodBefore        String?
+  moodAfter         String?
+  createdAt         TimestamptzString(6) @default(now()) @map("created_at")
+  clientCreatedAt   TimestamptzString(6)? @map("client_created_at")
+  syncStatus        String? @default("pending") @map("sync_status")
+
+  patient           Patient @relation(fields: [patientId], references: [id])
+  game              Game @relation(fields: [gameId], references: [id])
+  responses         GameResponse[]
+  cognitivePerformance CognitivePerformance[]
+
+  @@map("game_sessions")
+}
+
+
+// LANGUAGE
+model Language {
+  code       String  @id
+
+  name       String
+  nativeName String? @map("native_name")
+
+  isActive   Boolean @default(true) @map("is_active")
+
+  @@map("languages")
+}
+
+
+// MEDIA ASSET
+model MediaAsset {
+  id                Uuid    @id @default(dbgenerated("gen_random_uuid()"))
+
+  mediaType         String  @map("media_type")
+  fileName          String  @map("file_name")
+
+  storageUrl        String? @map("storage_url")
+  localFileKey      String? @map("local_file_key")
+
+  durationSeconds   Decimal? @map("duration_seconds")
+  fileSizeBytes     BigInt?  @map("file_size_bytes")
+
+  checksum          String?
+
+  createdAt         TimestamptzString(6) @default(now()) @map("created_at")
+  deletedAt         TimestamptzString(6)? @map("deleted_at")
+
+  culturalContentId Uuid? @map("cultural_content_id")
+
+  culturalContent   CulturalContent?
+    @relation(fields: [culturalContentId], references: [id])
+
+  @@map("media_assets")
+}
+
+
+// MEDICATION
+model Medication {
+  id             Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  patientId      Uuid   @map("patient_id")
+
+  medicineName   String @map("medicine_name")
+  dosage         String?
+  frequency      String?
+
+  scheduledTime  TimeString? @map("scheduled_time")
+
+  startDate      DateString? @map("start_date")
+  endDate        DateString? @map("end_date")
+
+  instructions   String?
+
+  isActive       Boolean @default(true) @map("is_active")
+
+  patient        Patient @relation(
+    "PatientMedications",
+    fields: [patientId],
+    references: [id]
+  )
+
+  medicationLogs MedicationLog[] @relation("MedicationLogs")
+
+  @@map("medications")
+}
+
+
+// MEDICATION LOG
+model MedicationLog {
+  id           Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+
+  medicationId Uuid   @map("medication_id")
+  patientId    Uuid   @map("patient_id")
+
+  takenAt      TimestamptzString(6)? @map("taken_at")
+
+  status       String @default("pending")
+
+  medication   Medication @relation(
+    "MedicationLogs",
+    fields: [medicationId],
+    references: [id]
+  )
+
+  patient      Patient @relation(fields: [patientId], references: [id])
+
+  createdAt    TimestamptzString(6) @default(now()) @map("created_at")
+
+  @@map("medication_logs")
+}
+
+
+// SAFETY CHECK-IN
+model SafetyCheckin {
+  id             Uuid    @id @default(dbgenerated("gen_random_uuid()"))
+
+  patientId      Uuid    @map("patient_id")
+  deviceId       String? @map("device_id")
+
+  latitude       Decimal?
+  longitude      Decimal?
+
+  accuracyMeters Decimal? @map("accuracy_meters")
+
+  checkinType    String?  @map("checkin_type")
+
+  syncedAt       TimestamptzString(6)? @map("synced_at")
+
+  recordedAt     TimestamptzString(6) @default(now()) @map("recorded_at")
+
+  patient        Patient @relation(fields: [patientId], references: [id])
+
+  @@map("safety_checkins")
+}
+
+model MemoryJournal {
+  id        Uuid   @id @default(dbgenerated("gen_random_uuid()"))
+  patientId Uuid   @map("patient_id")
+
+  title     String?
+  content   String
+  mood      String?
+
+  createdAt TimestamptzString(6) @default(now()) @map("created_at")
+  updatedAt TimestamptzString(6) @default(now()) @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@map("memory_journal_entries")
 }

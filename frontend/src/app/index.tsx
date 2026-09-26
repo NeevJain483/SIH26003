@@ -8,30 +8,55 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 
 import { useState } from "react";
 import { router } from "expo-router";
-import api from "@/api";
+import api, { getApiErrorMessage } from "@/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  // const [rememberMe, setRememberMe] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
     setLoginError("");
-    console.log("hello");
+
     try {
-      const res = await api.login(email, password);
-      console.log(res);
-      router.replace("/(authanticated)/home");
-    } catch (error) {
+      const user = await api.login(email.trim(), password);
+
+      // Patient
+      if (user.role === "patient") {
+        router.replace(
+          "/(authenticated)/(patient)/home",
+        );
+        return;
+      }
+
+      // Caregiver
+      if (user.role === "caregiver") {
+        router.replace(
+          "/(authenticated)/(caregiver)/home",
+        );
+        return;
+      }
+
+      // Unknown role
+      setLoginError("Unknown user role.");
+    } catch (error: unknown) {
       console.error("Login failed:", error);
       setLoginError(
-        "Unable to log in. Check your email, password, and connection.",
+        getApiErrorMessage(error, "Unable to connect to the server."),
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +66,11 @@ export default function Login() {
 
       <KeyboardAvoidingView
         style={styles.keyboardView}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        behavior={
+          Platform.OS === "ios"
+            ? "padding"
+            : undefined
+        }
       >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -50,18 +79,26 @@ export default function Login() {
         >
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.logo}>MINDCARE</Text>
+            <Text style={styles.logo}>
+              MINDCARE
+            </Text>
 
-            <Text style={styles.title}>Welcome Back</Text>
+            <Text style={styles.title}>
+              Welcome Back
+            </Text>
 
-            <Text style={styles.subtitle}>Login to continue your journey</Text>
+            <Text style={styles.subtitle}>
+              Login to continue your journey
+            </Text>
           </View>
 
           {/* Form */}
           <View style={styles.form}>
             {/* Email */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>
+                Email
+              </Text>
 
               <TextInput
                 style={styles.input}
@@ -70,6 +107,7 @@ export default function Login() {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
+                editable={!loading}
                 value={email}
                 onChangeText={setEmail}
               />
@@ -77,81 +115,97 @@ export default function Login() {
 
             {/* Password */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>
+                Password
+              </Text>
 
               <TextInput
                 style={styles.input}
                 placeholder="Enter your password"
                 placeholderTextColor="#999"
                 secureTextEntry
+                editable={!loading}
                 value={password}
                 onChangeText={setPassword}
               />
             </View>
 
-            {/* Remember + Forgot */}
+            {/* Forgot Password */}
             <View style={styles.optionsRow}>
-              {/* <Pressable
-                style={styles.rememberContainer}
-                onPress={() => {
-                  setRememberMe(!rememberMe);
-                }}
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    rememberMe && styles.checkboxSelected,
-                  ]}
-                >
-                  {rememberMe && <Text style={styles.checkmark}>✓</Text>}
-                </View>
-
-                <Text style={styles.rememberText}>Remember me</Text>
-              </Pressable> */}
-
               <Pressable
+                disabled={loading}
                 onPress={() => {
-                  console.log("Forgot password");
+                  console.log(
+                    "Forgot password",
+                  );
                 }}
               >
-                <Text style={styles.forgotText}>Forgot password?</Text>
+                <Text style={styles.forgotText}>
+                  Forgot password?
+                </Text>
               </Pressable>
             </View>
 
             {/* Login Button */}
             <Pressable
+              disabled={loading}
               style={({ pressed }) => [
                 styles.loginButton,
-                pressed && styles.loginButtonPressed,
+
+                pressed &&
+                  !loading &&
+                  styles.loginButtonPressed,
+
+                loading &&
+                  styles.loginButtonDisabled,
               ]}
               onPress={handleLogin}
             >
-              <Text style={styles.loginText}>Login</Text>
+              {loading ? (
+                <ActivityIndicator
+                  size="small"
+                  color="#FFFFFF"
+                />
+              ) : (
+                <Text style={styles.loginText}>
+                  Login
+                </Text>
+              )}
             </Pressable>
 
+            {/* Login Error */}
             {loginError ? (
-              <Text style={styles.loginError}>{loginError}</Text>
+              <Text style={styles.loginError}>
+                {loginError}
+              </Text>
             ) : null}
 
             {/* Divider */}
             <View style={styles.dividerContainer}>
               <View style={styles.divider} />
 
-              <Text style={styles.orText}>OR</Text>
+              <Text style={styles.orText}>
+                OR
+              </Text>
 
               <View style={styles.divider} />
             </View>
 
             {/* Signup */}
             <View style={styles.signupContainer}>
-              <Text style={styles.signupQuestion}>Don't have an account?</Text>
+              <Text style={styles.signupQuestion}>
+                {"Don't"} have an account?
+              </Text>
 
               <Pressable
+                disabled={loading}
                 onPress={() => {
                   router.replace("/signup");
                 }}
               >
-                <Text style={styles.signupText}>Create Account</Text>
+                <Text style={styles.signupText}>
+                  Create Account
+                </Text>
               </Pressable>
             </View>
           </View>
@@ -224,7 +278,7 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     height: 58,
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
     borderColor: "#E0E2EA",
     borderRadius: 14,
@@ -236,42 +290,9 @@ const styles = StyleSheet.create({
 
   optionsRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
     marginBottom: 25,
-  },
-
-  rememberContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderWidth: 1.5,
-    borderColor: "#C8CAD4",
-    borderRadius: 6,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
-  },
-
-  checkboxSelected: {
-    backgroundColor: "#6C4AB6",
-    borderColor: "#6C4AB6",
-  },
-
-  checkmark: {
-    color: "white",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-
-  rememberText: {
-    fontSize: 14,
-    color: "#666572",
   },
 
   forgotText: {
@@ -287,6 +308,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     elevation: 5,
+
     shadowColor: "#6C4AB6",
     shadowOffset: {
       width: 0,
@@ -298,11 +320,19 @@ const styles = StyleSheet.create({
 
   loginButtonPressed: {
     opacity: 0.85,
-    transform: [{ scale: 0.98 }],
+    transform: [
+      {
+        scale: 0.98,
+      },
+    ],
+  },
+
+  loginButtonDisabled: {
+    opacity: 0.7,
   },
 
   loginText: {
-    color: "white",
+    color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "700",
   },

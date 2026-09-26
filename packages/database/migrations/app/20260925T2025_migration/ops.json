@@ -1,0 +1,2269 @@
+[
+  {
+    "id": "schema.public",
+    "label": "Create schema \"public\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create schema \"public\"",
+        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
+        "params": []
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "table.app_users",
+    "label": "Create table \"app_users\"",
+    "summary": "Creates table \"app_users\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "app_users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"app_users\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"app_users\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"app_users\"",
+        "sql": "CREATE TABLE \"public\".\"app_users\" (\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"full_name\" text NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"password_hash\" text NOT NULL,\n  \"phone\" text,\n  \"preferred_language\" text,\n  \"role\" text NOT NULL,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"app_users\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"app_users\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.caregiver_patients",
+    "label": "Create table \"caregiver_patients\"",
+    "summary": "Creates table \"caregiver_patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "caregiver_patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"caregiver_patients\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"caregiver_patients\"",
+        "sql": "CREATE TABLE \"public\".\"caregiver_patients\" (\n  \"caregiver_id\" uuid NOT NULL,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"is_primary\" bool DEFAULT false NOT NULL,\n  \"patient_id\" uuid NOT NULL,\n  \"relationship\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"caregiver_patients\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cognitive_performance",
+    "label": "Create table \"cognitive_performance\"",
+    "summary": "Creates table \"cognitive_performance\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cognitive_performance"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cognitive_performance\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cognitive_performance\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cognitive_performance\"",
+        "sql": "CREATE TABLE \"public\".\"cognitive_performance\" (\n  \"accuracy_percent\" numeric,\n  \"average_response_ms\" int4,\n  \"cognitive_domain\" text NOT NULL,\n  \"difficulty_level\" int4,\n  \"error_rate\" numeric,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"measured_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"patient_id\" uuid NOT NULL,\n  \"score\" numeric,\n  \"session_id\" uuid,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cognitive_performance\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cognitive_performance\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.cultural_content",
+    "label": "Create table \"cultural_content\"",
+    "summary": "Creates table \"cultural_content\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "cultural_content"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"cultural_content\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cultural_content\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"cultural_content\"",
+        "sql": "CREATE TABLE \"public\".\"cultural_content\" (\n  \"category\" text NOT NULL,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"deleted_at\" timestamptz(6),\n  \"description\" text,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"language_code\" text,\n  \"metadata\" json DEFAULT '\"{}\"'::json,\n  \"region\" text,\n  \"title\" text NOT NULL,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"cultural_content\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cultural_content\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.daily_care_logs",
+    "label": "Create table \"daily_care_logs\"",
+    "summary": "Creates table \"daily_care_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "daily_care_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"daily_care_logs\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"daily_care_logs\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"daily_care_logs\"",
+        "sql": "CREATE TABLE \"public\".\"daily_care_logs\" (\n  \"caregiver_id\" uuid,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"hydration_ml\" int4,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"meals_completed\" int4,\n  \"mood\" text,\n  \"notes\" text,\n  \"patient_id\" uuid NOT NULL,\n  \"sleepHours\" numeric,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"daily_care_logs\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"daily_care_logs\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.devices",
+    "label": "Create table \"devices\"",
+    "summary": "Creates table \"devices\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "devices"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"devices\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"devices\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"devices\"",
+        "sql": "CREATE TABLE \"public\".\"devices\" (\n  \"appVersion\" text,\n  \"caregiver_id\" uuid,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"device_id\" text NOT NULL,\n  \"device_name\" text,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"last_sync_at\" timestamptz(6),\n  \"patient_id\" uuid,\n  \"platform\" text,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"devices\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"devices\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.game_items",
+    "label": "Create table \"game_items\"",
+    "summary": "Creates table \"game_items\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "game_items"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"game_items\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_items\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"game_items\"",
+        "sql": "CREATE TABLE \"public\".\"game_items\" (\n  \"correct_answer\" text,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"cultural_content_id\" uuid,\n  \"deleted_at\" timestamptz(6),\n  \"difficulty\" int4 DEFAULT 1 NOT NULL,\n  \"game_id\" uuid NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"is_active\" bool DEFAULT true NOT NULL,\n  \"mediaIds\" json DEFAULT '\"[]\"'::json,\n  \"metadata\" json DEFAULT '\"{}\"'::json,\n  \"options\" json DEFAULT '\"[]\"'::json,\n  \"question_text\" text,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"game_items\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_items\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.game_responses",
+    "label": "Create table \"game_responses\"",
+    "summary": "Creates table \"game_responses\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "game_responses"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"game_responses\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_responses\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"game_responses\"",
+        "sql": "CREATE TABLE \"public\".\"game_responses\" (\n  \"answer_given\" text,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"difficulty_at_attempt\" int4,\n  \"game_item_id\" uuid NOT NULL,\n  \"hesitation_ms\" int4,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"is_correct\" bool,\n  \"question_number\" int4,\n  \"response_time_ms\" int4,\n  \"session_id\" uuid NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"game_responses\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_responses\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.game_sessions",
+    "label": "Create table \"game_sessions\"",
+    "summary": "Creates table \"game_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "game_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"game_sessions\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"game_sessions\"",
+        "sql": "CREATE TABLE \"public\".\"game_sessions\" (\n  \"average_response_ms\" int4,\n  \"client_created_at\" timestamptz(6),\n  \"completedAt\" timestamptz(6),\n  \"correct_answers\" int4 DEFAULT 0,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"device_id\" text,\n  \"final_difficulty\" int4,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"initial_difficulty\" int4,\n  \"moodAfter\" text,\n  \"moodBefore\" text,\n  \"patient_id\" uuid NOT NULL,\n  \"started_at\" timestamptz(6) NOT NULL,\n  \"sync_status\" text DEFAULT 'pending',\n  \"total_questions\" int4 DEFAULT 0,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"game_sessions\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.games",
+    "label": "Create table \"games\"",
+    "summary": "Creates table \"games\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "games"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"games\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"games\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"games\"",
+        "sql": "CREATE TABLE \"public\".\"games\" (\n  \"cognitive_domain\" text,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"difficulty_max\" int4 DEFAULT 5 NOT NULL,\n  \"difficulty_min\" int4 DEFAULT 1 NOT NULL,\n  \"game_type\" text NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"is_active\" bool DEFAULT true NOT NULL,\n  \"language_code\" text,\n  \"name\" text NOT NULL,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"games\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"games\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.languages",
+    "label": "Create table \"languages\"",
+    "summary": "Creates table \"languages\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "languages"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"languages\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"languages\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"languages\"",
+        "sql": "CREATE TABLE \"public\".\"languages\" (\n  \"code\" text NOT NULL,\n  \"is_active\" bool DEFAULT true NOT NULL,\n  \"name\" text NOT NULL,\n  \"native_name\" text,\n  PRIMARY KEY (\"code\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"languages\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"languages\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.media_assets",
+    "label": "Create table \"media_assets\"",
+    "summary": "Creates table \"media_assets\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "media_assets"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"media_assets\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"media_assets\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"media_assets\"",
+        "sql": "CREATE TABLE \"public\".\"media_assets\" (\n  \"checksum\" text,\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"cultural_content_id\" uuid,\n  \"deleted_at\" timestamptz(6),\n  \"duration_seconds\" numeric,\n  \"file_name\" text NOT NULL,\n  \"file_size_bytes\" int8,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"local_file_key\" text,\n  \"media_type\" text NOT NULL,\n  \"storage_url\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"media_assets\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"media_assets\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.medication_logs",
+    "label": "Create table \"medication_logs\"",
+    "summary": "Creates table \"medication_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "medication_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"medication_logs\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medication_logs\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"medication_logs\"",
+        "sql": "CREATE TABLE \"public\".\"medication_logs\" (\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"medication_id\" uuid NOT NULL,\n  \"patient_id\" uuid NOT NULL,\n  \"status\" text DEFAULT 'pending' NOT NULL,\n  \"taken_at\" timestamptz(6),\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"medication_logs\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medication_logs\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.medications",
+    "label": "Create table \"medications\"",
+    "summary": "Creates table \"medications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "medications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"medications\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medications\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"medications\"",
+        "sql": "CREATE TABLE \"public\".\"medications\" (\n  \"dosage\" text,\n  \"end_date\" date,\n  \"frequency\" text,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"instructions\" text,\n  \"is_active\" bool DEFAULT true NOT NULL,\n  \"medicine_name\" text NOT NULL,\n  \"patient_id\" uuid NOT NULL,\n  \"scheduled_time\" time,\n  \"start_date\" date,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"medications\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medications\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.patients",
+    "label": "Create table \"patients\"",
+    "summary": "Creates table \"patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"patients\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"patients\"",
+        "sql": "CREATE TABLE \"public\".\"patients\" (\n  \"consent_status\" text DEFAULT 'pending',\n  \"created_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"date_of_birth\" date,\n  \"deleted_at\" timestamptz(6),\n  \"dementia_stage\" text,\n  \"display_name\" text NOT NULL,\n  \"district\" text,\n  \"emergency_contact_name\" text,\n  \"emergency_contact_phone\" text,\n  \"gender\" text,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"patient_code\" text NOT NULL,\n  \"primary_language\" text,\n  \"state\" text,\n  \"updated_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"user_id\" uuid,\n  \"village\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"patients\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "table.safety_checkins",
+    "label": "Create table \"safety_checkins\"",
+    "summary": "Creates table \"safety_checkins\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "safety_checkins"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"safety_checkins\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"safety_checkins\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"safety_checkins\"",
+        "sql": "CREATE TABLE \"public\".\"safety_checkins\" (\n  \"accuracy_meters\" numeric,\n  \"checkin_type\" text,\n  \"device_id\" text,\n  \"id\" uuid DEFAULT (gen_random_uuid()) NOT NULL,\n  \"latitude\" numeric,\n  \"longitude\" numeric,\n  \"patient_id\" uuid NOT NULL,\n  \"recorded_at\" timestamptz(6) DEFAULT (now()) NOT NULL,\n  \"synced_at\" timestamptz(6),\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"safety_checkins\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"safety_checkins\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.app_users.app_users_email_key",
+    "label": "Add unique constraint on \"app_users\" (email)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "app_users_email_key",
+        "table": "app_users"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"app_users_email_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "app_users_email_key",
+          "public",
+          "\"public\".\"app_users\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"app_users_email_key\"",
+        "sql": "ALTER TABLE \"public\".\"app_users\" ADD CONSTRAINT \"app_users_email_key\" UNIQUE (\"email\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"app_users_email_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "app_users_email_key",
+          "public",
+          "\"public\".\"app_users\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.caregiver_patients.caregiver_patients_caregiver_id_patient_id_key",
+    "label": "Add unique constraint on \"caregiver_patients\" (caregiver_id, patient_id)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "caregiver_patients_caregiver_id_patient_id_key",
+        "table": "caregiver_patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"caregiver_patients_caregiver_id_patient_id_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "caregiver_patients_caregiver_id_patient_id_key",
+          "public",
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"caregiver_patients_caregiver_id_patient_id_key\"",
+        "sql": "ALTER TABLE \"public\".\"caregiver_patients\" ADD CONSTRAINT \"caregiver_patients_caregiver_id_patient_id_key\" UNIQUE (\"caregiver_id\", \"patient_id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"caregiver_patients_caregiver_id_patient_id_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "caregiver_patients_caregiver_id_patient_id_key",
+          "public",
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.patients.patients_user_id_key",
+    "label": "Add unique constraint on \"patients\" (user_id)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "patients_user_id_key",
+        "table": "patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"patients_user_id_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "patients_user_id_key",
+          "public",
+          "\"public\".\"patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"patients_user_id_key\"",
+        "sql": "ALTER TABLE \"public\".\"patients\" ADD CONSTRAINT \"patients_user_id_key\" UNIQUE (\"user_id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"patients_user_id_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "patients_user_id_key",
+          "public",
+          "\"public\".\"patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.caregiver_patients.caregiver_patients_caregiver_id_idx_d0c50cfd",
+    "label": "Create index \"caregiver_patients_caregiver_id_idx_d0c50cfd\" on \"caregiver_patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "caregiver_patients_caregiver_id_idx_d0c50cfd",
+        "table": "caregiver_patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"caregiver_patients_caregiver_id_idx_d0c50cfd\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"caregiver_patients_caregiver_id_idx_d0c50cfd\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"caregiver_patients_caregiver_id_idx_d0c50cfd\"",
+        "sql": "CREATE INDEX \"caregiver_patients_caregiver_id_idx_d0c50cfd\" ON \"public\".\"caregiver_patients\" (\"caregiver_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"caregiver_patients_caregiver_id_idx_d0c50cfd\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"caregiver_patients_caregiver_id_idx_d0c50cfd\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.caregiver_patients.caregiver_patients_patient_id_idx_2f641dda",
+    "label": "Create index \"caregiver_patients_patient_id_idx_2f641dda\" on \"caregiver_patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "caregiver_patients_patient_id_idx_2f641dda",
+        "table": "caregiver_patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"caregiver_patients_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"caregiver_patients_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"caregiver_patients_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"caregiver_patients_patient_id_idx_2f641dda\" ON \"public\".\"caregiver_patients\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"caregiver_patients_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"caregiver_patients_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cognitive_performance.cognitive_performance_patient_id_idx_2f641dda",
+    "label": "Create index \"cognitive_performance_patient_id_idx_2f641dda\" on \"cognitive_performance\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cognitive_performance_patient_id_idx_2f641dda",
+        "table": "cognitive_performance"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cognitive_performance_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cognitive_performance_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cognitive_performance_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"cognitive_performance_patient_id_idx_2f641dda\" ON \"public\".\"cognitive_performance\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cognitive_performance_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cognitive_performance_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.cognitive_performance.cognitive_performance_session_id_idx_00ba47bf",
+    "label": "Create index \"cognitive_performance_session_id_idx_00ba47bf\" on \"cognitive_performance\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "cognitive_performance_session_id_idx_00ba47bf",
+        "table": "cognitive_performance"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"cognitive_performance_session_id_idx_00ba47bf\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cognitive_performance_session_id_idx_00ba47bf\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"cognitive_performance_session_id_idx_00ba47bf\"",
+        "sql": "CREATE INDEX \"cognitive_performance_session_id_idx_00ba47bf\" ON \"public\".\"cognitive_performance\" (\"session_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"cognitive_performance_session_id_idx_00ba47bf\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"cognitive_performance_session_id_idx_00ba47bf\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.daily_care_logs.daily_care_logs_caregiver_id_idx_d0c50cfd",
+    "label": "Create index \"daily_care_logs_caregiver_id_idx_d0c50cfd\" on \"daily_care_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "daily_care_logs_caregiver_id_idx_d0c50cfd",
+        "table": "daily_care_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"daily_care_logs_caregiver_id_idx_d0c50cfd\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"daily_care_logs_caregiver_id_idx_d0c50cfd\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"daily_care_logs_caregiver_id_idx_d0c50cfd\"",
+        "sql": "CREATE INDEX \"daily_care_logs_caregiver_id_idx_d0c50cfd\" ON \"public\".\"daily_care_logs\" (\"caregiver_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"daily_care_logs_caregiver_id_idx_d0c50cfd\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"daily_care_logs_caregiver_id_idx_d0c50cfd\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.daily_care_logs.daily_care_logs_patient_id_idx_2f641dda",
+    "label": "Create index \"daily_care_logs_patient_id_idx_2f641dda\" on \"daily_care_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "daily_care_logs_patient_id_idx_2f641dda",
+        "table": "daily_care_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"daily_care_logs_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"daily_care_logs_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"daily_care_logs_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"daily_care_logs_patient_id_idx_2f641dda\" ON \"public\".\"daily_care_logs\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"daily_care_logs_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"daily_care_logs_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.devices.devices_caregiver_id_idx_d0c50cfd",
+    "label": "Create index \"devices_caregiver_id_idx_d0c50cfd\" on \"devices\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "devices_caregiver_id_idx_d0c50cfd",
+        "table": "devices"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"devices_caregiver_id_idx_d0c50cfd\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"devices_caregiver_id_idx_d0c50cfd\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"devices_caregiver_id_idx_d0c50cfd\"",
+        "sql": "CREATE INDEX \"devices_caregiver_id_idx_d0c50cfd\" ON \"public\".\"devices\" (\"caregiver_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"devices_caregiver_id_idx_d0c50cfd\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"devices_caregiver_id_idx_d0c50cfd\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.devices.devices_patient_id_idx_2f641dda",
+    "label": "Create index \"devices_patient_id_idx_2f641dda\" on \"devices\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "devices_patient_id_idx_2f641dda",
+        "table": "devices"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"devices_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"devices_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"devices_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"devices_patient_id_idx_2f641dda\" ON \"public\".\"devices\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"devices_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"devices_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.game_items.game_items_cultural_content_id_idx_d92a4b0a",
+    "label": "Create index \"game_items_cultural_content_id_idx_d92a4b0a\" on \"game_items\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "game_items_cultural_content_id_idx_d92a4b0a",
+        "table": "game_items"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"game_items_cultural_content_id_idx_d92a4b0a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_items_cultural_content_id_idx_d92a4b0a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"game_items_cultural_content_id_idx_d92a4b0a\"",
+        "sql": "CREATE INDEX \"game_items_cultural_content_id_idx_d92a4b0a\" ON \"public\".\"game_items\" (\"cultural_content_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"game_items_cultural_content_id_idx_d92a4b0a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_items_cultural_content_id_idx_d92a4b0a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.game_items.game_items_game_id_idx_aa9dd7a6",
+    "label": "Create index \"game_items_game_id_idx_aa9dd7a6\" on \"game_items\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "game_items_game_id_idx_aa9dd7a6",
+        "table": "game_items"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"game_items_game_id_idx_aa9dd7a6\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_items_game_id_idx_aa9dd7a6\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"game_items_game_id_idx_aa9dd7a6\"",
+        "sql": "CREATE INDEX \"game_items_game_id_idx_aa9dd7a6\" ON \"public\".\"game_items\" (\"game_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"game_items_game_id_idx_aa9dd7a6\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_items_game_id_idx_aa9dd7a6\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.game_responses.game_responses_game_item_id_idx_ac0102a4",
+    "label": "Create index \"game_responses_game_item_id_idx_ac0102a4\" on \"game_responses\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "game_responses_game_item_id_idx_ac0102a4",
+        "table": "game_responses"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"game_responses_game_item_id_idx_ac0102a4\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_responses_game_item_id_idx_ac0102a4\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"game_responses_game_item_id_idx_ac0102a4\"",
+        "sql": "CREATE INDEX \"game_responses_game_item_id_idx_ac0102a4\" ON \"public\".\"game_responses\" (\"game_item_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"game_responses_game_item_id_idx_ac0102a4\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_responses_game_item_id_idx_ac0102a4\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.game_responses.game_responses_session_id_idx_00ba47bf",
+    "label": "Create index \"game_responses_session_id_idx_00ba47bf\" on \"game_responses\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "game_responses_session_id_idx_00ba47bf",
+        "table": "game_responses"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"game_responses_session_id_idx_00ba47bf\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_responses_session_id_idx_00ba47bf\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"game_responses_session_id_idx_00ba47bf\"",
+        "sql": "CREATE INDEX \"game_responses_session_id_idx_00ba47bf\" ON \"public\".\"game_responses\" (\"session_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"game_responses_session_id_idx_00ba47bf\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_responses_session_id_idx_00ba47bf\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.game_sessions.game_sessions_patient_id_idx_2f641dda",
+    "label": "Create index \"game_sessions_patient_id_idx_2f641dda\" on \"game_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "game_sessions_patient_id_idx_2f641dda",
+        "table": "game_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"game_sessions_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_sessions_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"game_sessions_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"game_sessions_patient_id_idx_2f641dda\" ON \"public\".\"game_sessions\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"game_sessions_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"game_sessions_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.media_assets.media_assets_cultural_content_id_idx_d92a4b0a",
+    "label": "Create index \"media_assets_cultural_content_id_idx_d92a4b0a\" on \"media_assets\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "media_assets_cultural_content_id_idx_d92a4b0a",
+        "table": "media_assets"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"media_assets_cultural_content_id_idx_d92a4b0a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"media_assets_cultural_content_id_idx_d92a4b0a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"media_assets_cultural_content_id_idx_d92a4b0a\"",
+        "sql": "CREATE INDEX \"media_assets_cultural_content_id_idx_d92a4b0a\" ON \"public\".\"media_assets\" (\"cultural_content_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"media_assets_cultural_content_id_idx_d92a4b0a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"media_assets_cultural_content_id_idx_d92a4b0a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.medication_logs.medication_logs_medication_id_idx_7ed34ddc",
+    "label": "Create index \"medication_logs_medication_id_idx_7ed34ddc\" on \"medication_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "medication_logs_medication_id_idx_7ed34ddc",
+        "table": "medication_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"medication_logs_medication_id_idx_7ed34ddc\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medication_logs_medication_id_idx_7ed34ddc\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"medication_logs_medication_id_idx_7ed34ddc\"",
+        "sql": "CREATE INDEX \"medication_logs_medication_id_idx_7ed34ddc\" ON \"public\".\"medication_logs\" (\"medication_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"medication_logs_medication_id_idx_7ed34ddc\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medication_logs_medication_id_idx_7ed34ddc\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.medication_logs.medication_logs_patient_id_idx_2f641dda",
+    "label": "Create index \"medication_logs_patient_id_idx_2f641dda\" on \"medication_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "medication_logs_patient_id_idx_2f641dda",
+        "table": "medication_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"medication_logs_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medication_logs_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"medication_logs_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"medication_logs_patient_id_idx_2f641dda\" ON \"public\".\"medication_logs\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"medication_logs_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medication_logs_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.medications.medications_patient_id_idx_2f641dda",
+    "label": "Create index \"medications_patient_id_idx_2f641dda\" on \"medications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "medications_patient_id_idx_2f641dda",
+        "table": "medications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"medications_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medications_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"medications_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"medications_patient_id_idx_2f641dda\" ON \"public\".\"medications\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"medications_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"medications_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.safety_checkins.safety_checkins_patient_id_idx_2f641dda",
+    "label": "Create index \"safety_checkins_patient_id_idx_2f641dda\" on \"safety_checkins\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "safety_checkins_patient_id_idx_2f641dda",
+        "table": "safety_checkins"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"safety_checkins_patient_id_idx_2f641dda\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"safety_checkins_patient_id_idx_2f641dda\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"safety_checkins_patient_id_idx_2f641dda\"",
+        "sql": "CREATE INDEX \"safety_checkins_patient_id_idx_2f641dda\" ON \"public\".\"safety_checkins\" (\"patient_id\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"safety_checkins_patient_id_idx_2f641dda\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"safety_checkins_patient_id_idx_2f641dda\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.caregiver_patients.caregiver_patients_caregiver_id_fkey",
+    "label": "Add foreign key \"caregiver_patients_caregiver_id_fkey\" on \"caregiver_patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "caregiver_patients_caregiver_id_fkey",
+        "table": "caregiver_patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"caregiver_patients_caregiver_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "caregiver_patients_caregiver_id_fkey",
+          "public",
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"caregiver_patients_caregiver_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"caregiver_patients\"\nADD CONSTRAINT \"caregiver_patients_caregiver_id_fkey\"\nFOREIGN KEY (\"caregiver_id\")\nREFERENCES \"public\".\"app_users\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"caregiver_patients_caregiver_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "caregiver_patients_caregiver_id_fkey",
+          "public",
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.caregiver_patients.caregiver_patients_patient_id_fkey",
+    "label": "Add foreign key \"caregiver_patients_patient_id_fkey\" on \"caregiver_patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "caregiver_patients_patient_id_fkey",
+        "table": "caregiver_patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"caregiver_patients_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "caregiver_patients_patient_id_fkey",
+          "public",
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"caregiver_patients_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"caregiver_patients\"\nADD CONSTRAINT \"caregiver_patients_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"caregiver_patients_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "caregiver_patients_patient_id_fkey",
+          "public",
+          "\"public\".\"caregiver_patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cognitive_performance.cognitive_performance_patient_id_fkey",
+    "label": "Add foreign key \"cognitive_performance_patient_id_fkey\" on \"cognitive_performance\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cognitive_performance_patient_id_fkey",
+        "table": "cognitive_performance"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cognitive_performance_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cognitive_performance_patient_id_fkey",
+          "public",
+          "\"public\".\"cognitive_performance\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cognitive_performance_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cognitive_performance\"\nADD CONSTRAINT \"cognitive_performance_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cognitive_performance_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cognitive_performance_patient_id_fkey",
+          "public",
+          "\"public\".\"cognitive_performance\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.cognitive_performance.cognitive_performance_session_id_fkey",
+    "label": "Add foreign key \"cognitive_performance_session_id_fkey\" on \"cognitive_performance\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "cognitive_performance_session_id_fkey",
+        "table": "cognitive_performance"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"cognitive_performance_session_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cognitive_performance_session_id_fkey",
+          "public",
+          "\"public\".\"cognitive_performance\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"cognitive_performance_session_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"cognitive_performance\"\nADD CONSTRAINT \"cognitive_performance_session_id_fkey\"\nFOREIGN KEY (\"session_id\")\nREFERENCES \"public\".\"game_sessions\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"cognitive_performance_session_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "cognitive_performance_session_id_fkey",
+          "public",
+          "\"public\".\"cognitive_performance\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.daily_care_logs.daily_care_logs_patient_id_fkey",
+    "label": "Add foreign key \"daily_care_logs_patient_id_fkey\" on \"daily_care_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "daily_care_logs_patient_id_fkey",
+        "table": "daily_care_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"daily_care_logs_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "daily_care_logs_patient_id_fkey",
+          "public",
+          "\"public\".\"daily_care_logs\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"daily_care_logs_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"daily_care_logs\"\nADD CONSTRAINT \"daily_care_logs_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"daily_care_logs_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "daily_care_logs_patient_id_fkey",
+          "public",
+          "\"public\".\"daily_care_logs\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.daily_care_logs.daily_care_logs_caregiver_id_fkey",
+    "label": "Add foreign key \"daily_care_logs_caregiver_id_fkey\" on \"daily_care_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "daily_care_logs_caregiver_id_fkey",
+        "table": "daily_care_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"daily_care_logs_caregiver_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "daily_care_logs_caregiver_id_fkey",
+          "public",
+          "\"public\".\"daily_care_logs\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"daily_care_logs_caregiver_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"daily_care_logs\"\nADD CONSTRAINT \"daily_care_logs_caregiver_id_fkey\"\nFOREIGN KEY (\"caregiver_id\")\nREFERENCES \"public\".\"app_users\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"daily_care_logs_caregiver_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "daily_care_logs_caregiver_id_fkey",
+          "public",
+          "\"public\".\"daily_care_logs\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.devices.devices_patient_id_fkey",
+    "label": "Add foreign key \"devices_patient_id_fkey\" on \"devices\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "devices_patient_id_fkey",
+        "table": "devices"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"devices_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "devices_patient_id_fkey",
+          "public",
+          "\"public\".\"devices\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"devices_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"devices\"\nADD CONSTRAINT \"devices_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"devices_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "devices_patient_id_fkey",
+          "public",
+          "\"public\".\"devices\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.devices.devices_caregiver_id_fkey",
+    "label": "Add foreign key \"devices_caregiver_id_fkey\" on \"devices\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "devices_caregiver_id_fkey",
+        "table": "devices"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"devices_caregiver_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "devices_caregiver_id_fkey",
+          "public",
+          "\"public\".\"devices\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"devices_caregiver_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"devices\"\nADD CONSTRAINT \"devices_caregiver_id_fkey\"\nFOREIGN KEY (\"caregiver_id\")\nREFERENCES \"public\".\"app_users\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"devices_caregiver_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "devices_caregiver_id_fkey",
+          "public",
+          "\"public\".\"devices\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.game_items.game_items_game_id_fkey",
+    "label": "Add foreign key \"game_items_game_id_fkey\" on \"game_items\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "game_items_game_id_fkey",
+        "table": "game_items"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"game_items_game_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_items_game_id_fkey",
+          "public",
+          "\"public\".\"game_items\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"game_items_game_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"game_items\"\nADD CONSTRAINT \"game_items_game_id_fkey\"\nFOREIGN KEY (\"game_id\")\nREFERENCES \"public\".\"games\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"game_items_game_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_items_game_id_fkey",
+          "public",
+          "\"public\".\"game_items\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.game_items.game_items_cultural_content_id_fkey",
+    "label": "Add foreign key \"game_items_cultural_content_id_fkey\" on \"game_items\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "game_items_cultural_content_id_fkey",
+        "table": "game_items"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"game_items_cultural_content_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_items_cultural_content_id_fkey",
+          "public",
+          "\"public\".\"game_items\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"game_items_cultural_content_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"game_items\"\nADD CONSTRAINT \"game_items_cultural_content_id_fkey\"\nFOREIGN KEY (\"cultural_content_id\")\nREFERENCES \"public\".\"cultural_content\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"game_items_cultural_content_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_items_cultural_content_id_fkey",
+          "public",
+          "\"public\".\"game_items\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.game_responses.game_responses_session_id_fkey",
+    "label": "Add foreign key \"game_responses_session_id_fkey\" on \"game_responses\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "game_responses_session_id_fkey",
+        "table": "game_responses"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"game_responses_session_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_responses_session_id_fkey",
+          "public",
+          "\"public\".\"game_responses\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"game_responses_session_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"game_responses\"\nADD CONSTRAINT \"game_responses_session_id_fkey\"\nFOREIGN KEY (\"session_id\")\nREFERENCES \"public\".\"game_sessions\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"game_responses_session_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_responses_session_id_fkey",
+          "public",
+          "\"public\".\"game_responses\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.game_responses.game_responses_game_item_id_fkey",
+    "label": "Add foreign key \"game_responses_game_item_id_fkey\" on \"game_responses\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "game_responses_game_item_id_fkey",
+        "table": "game_responses"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"game_responses_game_item_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_responses_game_item_id_fkey",
+          "public",
+          "\"public\".\"game_responses\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"game_responses_game_item_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"game_responses\"\nADD CONSTRAINT \"game_responses_game_item_id_fkey\"\nFOREIGN KEY (\"game_item_id\")\nREFERENCES \"public\".\"game_items\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"game_responses_game_item_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_responses_game_item_id_fkey",
+          "public",
+          "\"public\".\"game_responses\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.game_sessions.game_sessions_patient_id_fkey",
+    "label": "Add foreign key \"game_sessions_patient_id_fkey\" on \"game_sessions\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "game_sessions_patient_id_fkey",
+        "table": "game_sessions"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"game_sessions_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_sessions_patient_id_fkey",
+          "public",
+          "\"public\".\"game_sessions\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"game_sessions_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"game_sessions\"\nADD CONSTRAINT \"game_sessions_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"game_sessions_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "game_sessions_patient_id_fkey",
+          "public",
+          "\"public\".\"game_sessions\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.media_assets.media_assets_cultural_content_id_fkey",
+    "label": "Add foreign key \"media_assets_cultural_content_id_fkey\" on \"media_assets\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "media_assets_cultural_content_id_fkey",
+        "table": "media_assets"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"media_assets_cultural_content_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "media_assets_cultural_content_id_fkey",
+          "public",
+          "\"public\".\"media_assets\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"media_assets_cultural_content_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"media_assets\"\nADD CONSTRAINT \"media_assets_cultural_content_id_fkey\"\nFOREIGN KEY (\"cultural_content_id\")\nREFERENCES \"public\".\"cultural_content\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"media_assets_cultural_content_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "media_assets_cultural_content_id_fkey",
+          "public",
+          "\"public\".\"media_assets\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.medication_logs.medication_logs_medication_id_fkey",
+    "label": "Add foreign key \"medication_logs_medication_id_fkey\" on \"medication_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "medication_logs_medication_id_fkey",
+        "table": "medication_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"medication_logs_medication_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "medication_logs_medication_id_fkey",
+          "public",
+          "\"public\".\"medication_logs\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"medication_logs_medication_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"medication_logs\"\nADD CONSTRAINT \"medication_logs_medication_id_fkey\"\nFOREIGN KEY (\"medication_id\")\nREFERENCES \"public\".\"medications\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"medication_logs_medication_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "medication_logs_medication_id_fkey",
+          "public",
+          "\"public\".\"medication_logs\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.medication_logs.medication_logs_patient_id_fkey",
+    "label": "Add foreign key \"medication_logs_patient_id_fkey\" on \"medication_logs\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "medication_logs_patient_id_fkey",
+        "table": "medication_logs"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"medication_logs_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "medication_logs_patient_id_fkey",
+          "public",
+          "\"public\".\"medication_logs\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"medication_logs_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"medication_logs\"\nADD CONSTRAINT \"medication_logs_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"medication_logs_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "medication_logs_patient_id_fkey",
+          "public",
+          "\"public\".\"medication_logs\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.medications.medications_patient_id_fkey",
+    "label": "Add foreign key \"medications_patient_id_fkey\" on \"medications\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "medications_patient_id_fkey",
+        "table": "medications"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"medications_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "medications_patient_id_fkey",
+          "public",
+          "\"public\".\"medications\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"medications_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"medications\"\nADD CONSTRAINT \"medications_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"medications_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "medications_patient_id_fkey",
+          "public",
+          "\"public\".\"medications\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.patients.patients_user_id_fkey",
+    "label": "Add foreign key \"patients_user_id_fkey\" on \"patients\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "patients_user_id_fkey",
+        "table": "patients"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"patients_user_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "patients_user_id_fkey",
+          "public",
+          "\"public\".\"patients\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"patients_user_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"patients\"\nADD CONSTRAINT \"patients_user_id_fkey\"\nFOREIGN KEY (\"user_id\")\nREFERENCES \"public\".\"app_users\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"patients_user_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "patients_user_id_fkey",
+          "public",
+          "\"public\".\"patients\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.safety_checkins.safety_checkins_patient_id_fkey",
+    "label": "Add foreign key \"safety_checkins_patient_id_fkey\" on \"safety_checkins\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "safety_checkins_patient_id_fkey",
+        "table": "safety_checkins"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"safety_checkins_patient_id_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "safety_checkins_patient_id_fkey",
+          "public",
+          "\"public\".\"safety_checkins\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"safety_checkins_patient_id_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"safety_checkins\"\nADD CONSTRAINT \"safety_checkins_patient_id_fkey\"\nFOREIGN KEY (\"patient_id\")\nREFERENCES \"public\".\"patients\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"safety_checkins_patient_id_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "safety_checkins_patient_id_fkey",
+          "public",
+          "\"public\".\"safety_checkins\""
+        ]
+      }
+    ]
+  }
+]

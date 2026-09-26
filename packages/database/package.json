@@ -13,6 +13,7 @@
     "migration:status": "prisma migration status",
     "db:migrate": "prisma db migrate --advance-ref db",
     "db:verify": "prisma db verify",
+    "db:update:preview": "prisma db update --dry-run --to db",
     "check-types": "tsc --noEmit"
   },
   "keywords": [],

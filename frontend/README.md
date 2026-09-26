@@ -10,6 +10,26 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
+The repository uses the root `.env` file for both the backend and Expo frontend.
+Copy `.env.example` to `.env` at the repository root and set `DATABASE_URL`,
+`JWT_SECRET`, and `EXPO_PUBLIC_API_URL`. The Expo config loads the root file
+through `app.config.js` and preserves the app settings in `app.json`, so start
+Expo from the `frontend` workspace after changing environment values.
+
+For a physical phone, `EXPO_PUBLIC_API_URL` must use the computer's Wi-Fi/LAN
+IPv4 address, not `localhost`, `127.0.0.1`, or a WSL/Hyper-V adapter address.
+Connect the phone and computer to the same Wi-Fi network, allow Node.js through
+the Windows firewall on that network, and verify that
+`http://<computer-lan-ip>:4000/health` opens on the phone. Restart Expo with
+`npx expo start -c` after changing the value because the API URL is bundled
+when the development client starts.
+
+If the phone is on mobile data or a Wi-Fi network that cannot reach the
+computer, connect it by USB with USB debugging enabled and run
+`adb reverse tcp:8081 tcp:8081`. Start Expo with `npx expo start --lan`, then
+open `exp://127.0.0.1:8081` in Expo Go. This forwards the frontend bundle over
+USB; API requests still need a reachable backend.
+
 2. Start the app
 
    ```bash

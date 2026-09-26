@@ -76,9 +76,12 @@ You can customize how your environment variables are loaded by changing or remov
 ### Commands
 
 ```bash
-npx prisma contract emit       # Update contract.json and contract.d.ts
-npx prisma db init             # Create tables in the database
-npx prisma migration status    # Show migration status
+npm run database:emit           # Regenerate the checked-in contract artifacts
+npm run database:plan           # Create a migration from contract changes
+npm run database:status         # Show the migration path and pending status
+npm run database:migrate        # Apply checked-in migrations
+npm run database:verify         # Verify the marker and live schema
+npm run database:update:preview # Preview direct schema reconciliation
 ```
 
 ### Files
@@ -94,8 +97,17 @@ npx prisma migration status    # Show migration status
 ### Workflow
 
 1. Edit [`src/prisma/contract.prisma`](src/prisma/contract.prisma) to add or change models.
-2. Run `npx prisma contract emit` to regenerate the contract.
-3. Query your models — your IDE will autocomplete everything.
+2. Run `npm run database:emit` to regenerate the contract artifacts.
+3. Run `npm run database:plan -- --name <short-description>` to create a migration.
+4. Review the generated migration, commit the contract artifacts and migration files together.
+5. Run `npm run database:migrate` against the intended database.
+6. Run `npm run database:verify` and only then deploy the application.
+
+Never delete or rewrite a migration that has been applied to a shared database. If
+the database was changed outside the migration graph, first run
+`npm run database:update:preview`, review every operation, and apply the update
+only after taking a backup. Use `db sign` only when schema verification confirms
+the live schema already matches the contract; signing does not change tables.
 
 ## Monorepo notes (pnpm workspaces)
 

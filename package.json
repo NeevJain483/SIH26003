@@ -8,6 +8,19 @@
   ],
   "scripts": {
     "frontend": "npm run start --workspace=frontend",
-    "backend": "npm run dev --workspace=backend"
+    "backend": "npm run dev --workspace=backend",
+    "database:emit": "npm run contract:emit --workspace=@mindcare-ner/db",
+    "database:plan": "npm run migration:plan --workspace=@mindcare-ner/db",
+    "database:status": "npm run migration:status --workspace=@mindcare-ner/db",
+    "database:migrate": "npm run db:migrate --workspace=@mindcare-ner/db",
+    "database:verify": "npm run db:verify --workspace=@mindcare-ner/db",
+    "database:update:preview": "npm run db:update:preview --workspace=@mindcare-ner/db"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "react": "^19.2.3"
+  },
+  "dependencies": {
+    "globby": "^16.2.4"
   }
 }

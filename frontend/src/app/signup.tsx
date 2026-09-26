@@ -6,30 +6,67 @@ import {
   Text,
   TextInput,
   ScrollView,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 
 import { useState } from "react";
 import { router } from "expo-router";
+import api, { getApiErrorMessage } from "@/api";
 
 export default function Signup() {
-  const [role, setRole] = useState("patient");
+  const [role, setRole] = useState<"patient" | "caregiver">("patient");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [signupError, setSignupError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = () => {
-    console.log("Signup pressed");
+  const handleSignup = async () => {
+    if (loading) {
+      return;
+    }
 
-    console.log({
-      name,
-      email,
-      phone,
-      password,
-      confirmPassword,
-    });
-    router.replace("/(authanticated)/home");
+    setSignupError("");
+    if (
+      !name.trim() ||
+      !email.trim() ||
+      !phone.trim() ||
+      !password ||
+      !confirmPassword
+    ) {
+      setSignupError("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setSignupError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await api.register(
+        name.trim(),
+        email.trim(),
+        phone.trim(),
+        password,
+        role,
+      );
+
+      Alert.alert("Account created", "You can now log in.", [
+        { text: "Continue", onPress: () => router.replace("/") },
+      ]);
+    } catch (error) {
+      console.error("Signup failed:", error);
+      setSignupError(
+        getApiErrorMessage(error, "Unable to create your account."),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,6 +101,7 @@ export default function Signup() {
               style={styles.input}
               placeholder="Enter your full name"
               placeholderTextColor="#999"
+              editable={!loading}
               value={name}
               onChangeText={setName}
             />
@@ -80,6 +118,8 @@ export default function Signup() {
               placeholderTextColor="#999"
               keyboardType="email-address"
               autoCapitalize="none"
+              autoCorrect={false}
+              editable={!loading}
               value={email}
               onChangeText={setEmail}
             />
@@ -95,6 +135,7 @@ export default function Signup() {
               placeholder="Enter your phone number"
               placeholderTextColor="#999"
               keyboardType="phone-pad"
+              editable={!loading}
               value={phone}
               onChangeText={setPhone}
             />
@@ -110,6 +151,7 @@ export default function Signup() {
               placeholder="Create a password"
               placeholderTextColor="#999"
               secureTextEntry
+              editable={!loading}
               value={password}
               onChangeText={setPassword}
             />
@@ -124,6 +166,7 @@ export default function Signup() {
                   styles.roleButton,
                   role === "patient" && styles.roleButtonSelected,
                 ]}
+                disabled={loading}
                 onPress={() => setRole("patient")}
               >
                 <Text
@@ -141,6 +184,7 @@ export default function Signup() {
                   styles.roleButton,
                   role === "caregiver" && styles.roleButtonSelected,
                 ]}
+                disabled={loading}
                 onPress={() => setRole("caregiver")}
               >
                 <Text
@@ -165,6 +209,7 @@ export default function Signup() {
               placeholder="Confirm your password"
               placeholderTextColor="#999"
               secureTextEntry
+              editable={!loading}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
             />
@@ -173,14 +218,26 @@ export default function Signup() {
           {/* Signup Button */}
 
           <Pressable
+            disabled={loading}
             style={({ pressed }) => [
               styles.signupButton,
               pressed && styles.signupButtonPressed,
+              loading && styles.signupButtonDisabled,
             ]}
             onPress={handleSignup}
           >
-            <Text style={styles.signupText}>Create Account</Text>
+            {loading ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <Text style={styles.signupText}>Create Account</Text>
+            )}
           </Pressable>
+
+          {signupError ? (
+            <Text accessibilityRole="alert" style={styles.signupError}>
+              {signupError}
+            </Text>
+          ) : null}
 
           {/* Login */}
 
@@ -323,6 +380,17 @@ const styles = StyleSheet.create({
         scale: 0.98,
       },
     ],
+  },
+
+  signupButtonDisabled: {
+    opacity: 0.7,
+  },
+
+  signupError: {
+    marginTop: 12,
+    color: "#B42318",
+    fontSize: 14,
+    textAlign: "center",
   },
 
   signupText: {

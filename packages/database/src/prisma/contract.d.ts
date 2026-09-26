@@ -34,9 +34,8 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'774f95999e5d4157363f6a8990e676e4d2f70611d7591d1b919c32f0821701c5'>;
-export type ExecutionHash =
-  ExecutionHashBase<'a499031370d1fd1891ca11072d3f7e11be752b686057f7c6d0900ee0159f4ed0'>;
+  StorageHashBase<'2040a66467d149644b3ed866fb7fff34acbd7805cfc17d5f2a3ceb22eb316b92'>;
+export type ExecutionHash = ExecutionHashBase<string>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -242,23 +241,411 @@ type DefaultLiteralValue<CodecId extends string, Encoded> = CodecId extends keyo
 
 export type FieldOutputTypes = {
   readonly public: {
+    readonly CaregiverPatient: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly caregiverId: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly relationship: CodecTypes['pg/text@1']['output'] | null;
+      readonly isPrimary: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: TimestamptzString<6>;
+    };
+    readonly CognitivePerformance: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly sessionId: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly cognitiveDomain: CodecTypes['pg/text@1']['output'];
+      readonly score: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly accuracyPercent: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly averageResponseMs: CodecTypes['pg/int4@1']['output'] | null;
+      readonly errorRate: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly difficultyLevel: CodecTypes['pg/int4@1']['output'] | null;
+      readonly measuredAt: TimestamptzString<6>;
+    };
+    readonly CulturalContent: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly category: CodecTypes['pg/text@1']['output'];
+      readonly region: CodecTypes['pg/text@1']['output'] | null;
+      readonly languageCode: CodecTypes['pg/text@1']['output'] | null;
+      readonly description: CodecTypes['pg/text@1']['output'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+      readonly deletedAt: TimestamptzString<6> | null;
+    };
+    readonly DailyCareLog: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly caregiverId: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly mood: CodecTypes['pg/text@1']['output'] | null;
+      readonly hydrationMl: CodecTypes['pg/int4@1']['output'] | null;
+      readonly mealsCompleted: CodecTypes['pg/int4@1']['output'] | null;
+      readonly sleepHours: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly notes: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+    };
+    readonly Device: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly deviceId: CodecTypes['pg/text@1']['output'];
+      readonly deviceName: CodecTypes['pg/text@1']['output'] | null;
+      readonly platform: CodecTypes['pg/text@1']['output'] | null;
+      readonly appVersion: CodecTypes['pg/text@1']['output'] | null;
+      readonly patientId: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly caregiverId: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly lastSyncAt: TimestamptzString<6> | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+    };
+    readonly Game: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
+      readonly gameType: CodecTypes['pg/text@1']['output'];
+      readonly cognitiveDomain: CodecTypes['pg/text@1']['output'] | null;
+      readonly difficultyMin: CodecTypes['pg/int4@1']['output'];
+      readonly difficultyMax: CodecTypes['pg/int4@1']['output'];
+      readonly languageCode: CodecTypes['pg/text@1']['output'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+    };
+    readonly GameItem: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly gameId: CodecTypes['pg/uuid@1']['output'];
+      readonly culturalContentId: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly questionText: CodecTypes['pg/text@1']['output'] | null;
+      readonly difficulty: CodecTypes['pg/int4@1']['output'];
+      readonly correctAnswer: CodecTypes['pg/text@1']['output'] | null;
+      readonly options: CodecTypes['pg/json@1']['output'] | null;
+      readonly mediaIds: CodecTypes['pg/json@1']['output'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['output'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['output'];
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+      readonly deletedAt: TimestamptzString<6> | null;
+    };
+    readonly GameResponse: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly sessionId: CodecTypes['pg/uuid@1']['output'];
+      readonly gameItemId: CodecTypes['pg/uuid@1']['output'];
+      readonly questionNumber: CodecTypes['pg/int4@1']['output'] | null;
+      readonly answerGiven: CodecTypes['pg/text@1']['output'] | null;
+      readonly isCorrect: CodecTypes['pg/bool@1']['output'] | null;
+      readonly responseTimeMs: CodecTypes['pg/int4@1']['output'] | null;
+      readonly hesitationMs: CodecTypes['pg/int4@1']['output'] | null;
+      readonly difficultyAtAttempt: CodecTypes['pg/int4@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+    };
+    readonly GameSession: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly gameId: CodecTypes['pg/uuid@1']['output'];
+      readonly deviceId: CodecTypes['pg/text@1']['output'] | null;
+      readonly startedAt: TimestamptzString<6>;
+      readonly completedAt: TimestamptzString<6> | null;
+      readonly initialDifficulty: CodecTypes['pg/int4@1']['output'] | null;
+      readonly finalDifficulty: CodecTypes['pg/int4@1']['output'] | null;
+      readonly totalQuestions: CodecTypes['pg/int4@1']['output'] | null;
+      readonly correctAnswers: CodecTypes['pg/int4@1']['output'] | null;
+      readonly averageResponseMs: CodecTypes['pg/int4@1']['output'] | null;
+      readonly moodBefore: CodecTypes['pg/text@1']['output'] | null;
+      readonly moodAfter: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly clientCreatedAt: TimestamptzString<6> | null;
+      readonly syncStatus: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly Language: {
+      readonly code: CodecTypes['pg/text@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
+      readonly nativeName: CodecTypes['pg/text@1']['output'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['output'];
+    };
+    readonly MediaAsset: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly mediaType: CodecTypes['pg/text@1']['output'];
+      readonly fileName: CodecTypes['pg/text@1']['output'];
+      readonly storageUrl: CodecTypes['pg/text@1']['output'] | null;
+      readonly localFileKey: CodecTypes['pg/text@1']['output'] | null;
+      readonly durationSeconds: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly fileSizeBytes: CodecTypes['pg/int8@1']['output'] | null;
+      readonly checksum: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly deletedAt: TimestamptzString<6> | null;
+      readonly culturalContentId: CodecTypes['pg/uuid@1']['output'] | null;
+    };
+    readonly Medication: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly medicineName: CodecTypes['pg/text@1']['output'];
+      readonly dosage: CodecTypes['pg/text@1']['output'] | null;
+      readonly frequency: CodecTypes['pg/text@1']['output'] | null;
+      readonly scheduledTime: CodecTypes['pg/time-string@1']['output'] | null;
+      readonly startDate: CodecTypes['pg/date-string@1']['output'] | null;
+      readonly endDate: CodecTypes['pg/date-string@1']['output'] | null;
+      readonly instructions: CodecTypes['pg/text@1']['output'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['output'];
+    };
+    readonly MedicationLog: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly medicationId: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly takenAt: TimestamptzString<6> | null;
+      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly createdAt: TimestamptzString<6>;
+    };
+    readonly MemoryJournal: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'] | null;
+      readonly content: CodecTypes['pg/text@1']['output'];
+      readonly mood: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+    };
+    readonly Patient: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly patientCode: CodecTypes['pg/text@1']['output'];
+      readonly displayName: CodecTypes['pg/text@1']['output'];
+      readonly dateOfBirth: CodecTypes['pg/date-string@1']['output'] | null;
+      readonly gender: CodecTypes['pg/text@1']['output'] | null;
+      readonly primaryLanguage: CodecTypes['pg/text@1']['output'] | null;
+      readonly state: CodecTypes['pg/text@1']['output'] | null;
+      readonly district: CodecTypes['pg/text@1']['output'] | null;
+      readonly village: CodecTypes['pg/text@1']['output'] | null;
+      readonly dementiaStage: CodecTypes['pg/text@1']['output'] | null;
+      readonly emergencyContactName: CodecTypes['pg/text@1']['output'] | null;
+      readonly emergencyContactPhone: CodecTypes['pg/text@1']['output'] | null;
+      readonly consentStatus: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
+      readonly deletedAt: TimestamptzString<6> | null;
+    };
+    readonly SafetyCheckin: {
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patientId: CodecTypes['pg/uuid@1']['output'];
+      readonly deviceId: CodecTypes['pg/text@1']['output'] | null;
+      readonly latitude: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly longitude: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly accuracyMeters: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly checkinType: CodecTypes['pg/text@1']['output'] | null;
+      readonly syncedAt: TimestamptzString<6> | null;
+      readonly recordedAt: TimestamptzString<6>;
+    };
     readonly User: {
-      readonly id: CodecTypes['pg/int4@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly fullName: CodecTypes['pg/text@1']['output'];
+      readonly phone: CodecTypes['pg/text@1']['output'] | null;
       readonly email: CodecTypes['pg/text@1']['output'];
-      readonly username: CodecTypes['pg/text@1']['output'] | null;
-      readonly name: CodecTypes['pg/text@1']['output'] | null;
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
-      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
+      readonly role: CodecTypes['pg/text@1']['output'];
+      readonly passwordHash: CodecTypes['pg/text@1']['output'];
+      readonly preferredLanguage: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: TimestamptzString<6>;
+      readonly updatedAt: TimestamptzString<6>;
     };
   };
 };
 export type FieldInputTypes = {
   readonly public: {
+    readonly CaregiverPatient: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly caregiverId: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly relationship: CodecTypes['pg/text@1']['input'] | null;
+      readonly isPrimary: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly CognitivePerformance: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly sessionId: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly cognitiveDomain: CodecTypes['pg/text@1']['input'];
+      readonly score: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly accuracyPercent: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly averageResponseMs: CodecTypes['pg/int4@1']['input'] | null;
+      readonly errorRate: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly difficultyLevel: CodecTypes['pg/int4@1']['input'] | null;
+      readonly measuredAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly CulturalContent: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly category: CodecTypes['pg/text@1']['input'];
+      readonly region: CodecTypes['pg/text@1']['input'] | null;
+      readonly languageCode: CodecTypes['pg/text@1']['input'] | null;
+      readonly description: CodecTypes['pg/text@1']['input'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly deletedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+    };
+    readonly DailyCareLog: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly caregiverId: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly mood: CodecTypes['pg/text@1']['input'] | null;
+      readonly hydrationMl: CodecTypes['pg/int4@1']['input'] | null;
+      readonly mealsCompleted: CodecTypes['pg/int4@1']['input'] | null;
+      readonly sleepHours: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly notes: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly Device: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly deviceId: CodecTypes['pg/text@1']['input'];
+      readonly deviceName: CodecTypes['pg/text@1']['input'] | null;
+      readonly platform: CodecTypes['pg/text@1']['input'] | null;
+      readonly appVersion: CodecTypes['pg/text@1']['input'] | null;
+      readonly patientId: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly caregiverId: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly lastSyncAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly Game: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
+      readonly gameType: CodecTypes['pg/text@1']['input'];
+      readonly cognitiveDomain: CodecTypes['pg/text@1']['input'] | null;
+      readonly difficultyMin: CodecTypes['pg/int4@1']['input'];
+      readonly difficultyMax: CodecTypes['pg/int4@1']['input'];
+      readonly languageCode: CodecTypes['pg/text@1']['input'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly GameItem: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly gameId: CodecTypes['pg/uuid@1']['input'];
+      readonly culturalContentId: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly questionText: CodecTypes['pg/text@1']['input'] | null;
+      readonly difficulty: CodecTypes['pg/int4@1']['input'];
+      readonly correctAnswer: CodecTypes['pg/text@1']['input'] | null;
+      readonly options: CodecTypes['pg/json@1']['input'] | null;
+      readonly mediaIds: CodecTypes['pg/json@1']['input'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['input'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly deletedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+    };
+    readonly GameResponse: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly sessionId: CodecTypes['pg/uuid@1']['input'];
+      readonly gameItemId: CodecTypes['pg/uuid@1']['input'];
+      readonly questionNumber: CodecTypes['pg/int4@1']['input'] | null;
+      readonly answerGiven: CodecTypes['pg/text@1']['input'] | null;
+      readonly isCorrect: CodecTypes['pg/bool@1']['input'] | null;
+      readonly responseTimeMs: CodecTypes['pg/int4@1']['input'] | null;
+      readonly hesitationMs: CodecTypes['pg/int4@1']['input'] | null;
+      readonly difficultyAtAttempt: CodecTypes['pg/int4@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly GameSession: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly gameId: CodecTypes['pg/uuid@1']['input'];
+      readonly deviceId: CodecTypes['pg/text@1']['input'] | null;
+      readonly startedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly completedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly initialDifficulty: CodecTypes['pg/int4@1']['input'] | null;
+      readonly finalDifficulty: CodecTypes['pg/int4@1']['input'] | null;
+      readonly totalQuestions: CodecTypes['pg/int4@1']['input'] | null;
+      readonly correctAnswers: CodecTypes['pg/int4@1']['input'] | null;
+      readonly averageResponseMs: CodecTypes['pg/int4@1']['input'] | null;
+      readonly moodBefore: CodecTypes['pg/text@1']['input'] | null;
+      readonly moodAfter: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly clientCreatedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly syncStatus: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly Language: {
+      readonly code: CodecTypes['pg/text@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
+      readonly nativeName: CodecTypes['pg/text@1']['input'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['input'];
+    };
+    readonly MediaAsset: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly mediaType: CodecTypes['pg/text@1']['input'];
+      readonly fileName: CodecTypes['pg/text@1']['input'];
+      readonly storageUrl: CodecTypes['pg/text@1']['input'] | null;
+      readonly localFileKey: CodecTypes['pg/text@1']['input'] | null;
+      readonly durationSeconds: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly fileSizeBytes: CodecTypes['pg/int8@1']['input'] | null;
+      readonly checksum: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly deletedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly culturalContentId: CodecTypes['pg/uuid@1']['input'] | null;
+    };
+    readonly Medication: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly medicineName: CodecTypes['pg/text@1']['input'];
+      readonly dosage: CodecTypes['pg/text@1']['input'] | null;
+      readonly frequency: CodecTypes['pg/text@1']['input'] | null;
+      readonly scheduledTime: CodecTypes['pg/time-string@1']['input'] | null;
+      readonly startDate: CodecTypes['pg/date-string@1']['input'] | null;
+      readonly endDate: CodecTypes['pg/date-string@1']['input'] | null;
+      readonly instructions: CodecTypes['pg/text@1']['input'] | null;
+      readonly isActive: CodecTypes['pg/bool@1']['input'];
+    };
+    readonly MedicationLog: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly medicationId: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly takenAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly MemoryJournal: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'] | null;
+      readonly content: CodecTypes['pg/text@1']['input'];
+      readonly mood: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly Patient: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly patientCode: CodecTypes['pg/text@1']['input'];
+      readonly displayName: CodecTypes['pg/text@1']['input'];
+      readonly dateOfBirth: CodecTypes['pg/date-string@1']['input'] | null;
+      readonly gender: CodecTypes['pg/text@1']['input'] | null;
+      readonly primaryLanguage: CodecTypes['pg/text@1']['input'] | null;
+      readonly state: CodecTypes['pg/text@1']['input'] | null;
+      readonly district: CodecTypes['pg/text@1']['input'] | null;
+      readonly village: CodecTypes['pg/text@1']['input'] | null;
+      readonly dementiaStage: CodecTypes['pg/text@1']['input'] | null;
+      readonly emergencyContactName: CodecTypes['pg/text@1']['input'] | null;
+      readonly emergencyContactPhone: CodecTypes['pg/text@1']['input'] | null;
+      readonly consentStatus: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly deletedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+    };
+    readonly SafetyCheckin: {
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patientId: CodecTypes['pg/uuid@1']['input'];
+      readonly deviceId: CodecTypes['pg/text@1']['input'] | null;
+      readonly latitude: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly longitude: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly accuracyMeters: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly checkinType: CodecTypes['pg/text@1']['input'] | null;
+      readonly syncedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly recordedAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
     readonly User: {
-      readonly id: CodecTypes['pg/int4@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly fullName: CodecTypes['pg/text@1']['input'];
+      readonly phone: CodecTypes['pg/text@1']['input'] | null;
       readonly email: CodecTypes['pg/text@1']['input'];
-      readonly username: CodecTypes['pg/text@1']['input'] | null;
-      readonly name: CodecTypes['pg/text@1']['input'] | null;
+      readonly role: CodecTypes['pg/text@1']['input'];
+      readonly passwordHash: CodecTypes['pg/text@1']['input'];
+      readonly preferredLanguage: CodecTypes['pg/text@1']['input'] | null;
       readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
     };
@@ -266,44 +653,708 @@ export type FieldInputTypes = {
 };
 export type StorageColumnTypes = {
   readonly public: {
-    readonly user: {
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
+    readonly app_users: {
+      readonly created_at: TimestamptzString<6>;
       readonly email: CodecTypes['pg/text@1']['output'];
-      readonly id: CodecTypes['pg/int4@1']['output'];
-      readonly name: CodecTypes['pg/text@1']['output'] | null;
-      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
-      readonly username: CodecTypes['pg/text@1']['output'] | null;
+      readonly full_name: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly password_hash: CodecTypes['pg/text@1']['output'];
+      readonly phone: CodecTypes['pg/text@1']['output'] | null;
+      readonly preferred_language: CodecTypes['pg/text@1']['output'] | null;
+      readonly role: CodecTypes['pg/text@1']['output'];
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly caregiver_patients: {
+      readonly caregiver_id: CodecTypes['pg/uuid@1']['output'];
+      readonly created_at: TimestamptzString<6>;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly is_primary: CodecTypes['pg/bool@1']['output'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly relationship: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly cognitive_performance: {
+      readonly accuracy_percent: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly average_response_ms: CodecTypes['pg/int4@1']['output'] | null;
+      readonly cognitive_domain: CodecTypes['pg/text@1']['output'];
+      readonly difficulty_level: CodecTypes['pg/int4@1']['output'] | null;
+      readonly error_rate: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly measured_at: TimestamptzString<6>;
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly score: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly session_id: CodecTypes['pg/uuid@1']['output'] | null;
+    };
+    readonly cultural_content: {
+      readonly category: CodecTypes['pg/text@1']['output'];
+      readonly created_at: TimestamptzString<6>;
+      readonly deleted_at: TimestamptzString<6> | null;
+      readonly description: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly language_code: CodecTypes['pg/text@1']['output'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['output'] | null;
+      readonly region: CodecTypes['pg/text@1']['output'] | null;
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly daily_care_logs: {
+      readonly caregiver_id: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly hydration_ml: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly meals_completed: CodecTypes['pg/int4@1']['output'] | null;
+      readonly mood: CodecTypes['pg/text@1']['output'] | null;
+      readonly notes: CodecTypes['pg/text@1']['output'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly sleepHours: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly devices: {
+      readonly appVersion: CodecTypes['pg/text@1']['output'] | null;
+      readonly caregiver_id: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly device_id: CodecTypes['pg/text@1']['output'];
+      readonly device_name: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly last_sync_at: TimestamptzString<6> | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly platform: CodecTypes['pg/text@1']['output'] | null;
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly game_items: {
+      readonly correct_answer: CodecTypes['pg/text@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly cultural_content_id: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly deleted_at: TimestamptzString<6> | null;
+      readonly difficulty: CodecTypes['pg/int4@1']['output'];
+      readonly game_id: CodecTypes['pg/uuid@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly is_active: CodecTypes['pg/bool@1']['output'];
+      readonly mediaIds: CodecTypes['pg/json@1']['output'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['output'] | null;
+      readonly options: CodecTypes['pg/json@1']['output'] | null;
+      readonly question_text: CodecTypes['pg/text@1']['output'] | null;
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly game_responses: {
+      readonly answer_given: CodecTypes['pg/text@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly difficulty_at_attempt: CodecTypes['pg/int4@1']['output'] | null;
+      readonly game_item_id: CodecTypes['pg/uuid@1']['output'];
+      readonly hesitation_ms: CodecTypes['pg/int4@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly is_correct: CodecTypes['pg/bool@1']['output'] | null;
+      readonly question_number: CodecTypes['pg/int4@1']['output'] | null;
+      readonly response_time_ms: CodecTypes['pg/int4@1']['output'] | null;
+      readonly session_id: CodecTypes['pg/uuid@1']['output'];
+    };
+    readonly game_sessions: {
+      readonly average_response_ms: CodecTypes['pg/int4@1']['output'] | null;
+      readonly client_created_at: TimestamptzString<6> | null;
+      readonly completedAt: TimestamptzString<6> | null;
+      readonly correct_answers: CodecTypes['pg/int4@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly device_id: CodecTypes['pg/text@1']['output'] | null;
+      readonly final_difficulty: CodecTypes['pg/int4@1']['output'] | null;
+      readonly game_id: CodecTypes['pg/uuid@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly initial_difficulty: CodecTypes['pg/int4@1']['output'] | null;
+      readonly moodAfter: CodecTypes['pg/text@1']['output'] | null;
+      readonly moodBefore: CodecTypes['pg/text@1']['output'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly started_at: TimestamptzString<6>;
+      readonly sync_status: CodecTypes['pg/text@1']['output'] | null;
+      readonly total_questions: CodecTypes['pg/int4@1']['output'] | null;
+    };
+    readonly games: {
+      readonly cognitive_domain: CodecTypes['pg/text@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly difficulty_max: CodecTypes['pg/int4@1']['output'];
+      readonly difficulty_min: CodecTypes['pg/int4@1']['output'];
+      readonly game_type: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly is_active: CodecTypes['pg/bool@1']['output'];
+      readonly language_code: CodecTypes['pg/text@1']['output'] | null;
+      readonly name: CodecTypes['pg/text@1']['output'];
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly languages: {
+      readonly code: CodecTypes['pg/text@1']['output'];
+      readonly is_active: CodecTypes['pg/bool@1']['output'];
+      readonly name: CodecTypes['pg/text@1']['output'];
+      readonly native_name: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly media_assets: {
+      readonly checksum: CodecTypes['pg/text@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly cultural_content_id: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly deleted_at: TimestamptzString<6> | null;
+      readonly duration_seconds: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly file_name: CodecTypes['pg/text@1']['output'];
+      readonly file_size_bytes: CodecTypes['pg/int8@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly local_file_key: CodecTypes['pg/text@1']['output'] | null;
+      readonly media_type: CodecTypes['pg/text@1']['output'];
+      readonly storage_url: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly medication_logs: {
+      readonly created_at: TimestamptzString<6>;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly medication_id: CodecTypes['pg/uuid@1']['output'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly status: CodecTypes['pg/text@1']['output'];
+      readonly taken_at: TimestamptzString<6> | null;
+    };
+    readonly medications: {
+      readonly dosage: CodecTypes['pg/text@1']['output'] | null;
+      readonly end_date: CodecTypes['pg/date-string@1']['output'] | null;
+      readonly frequency: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly instructions: CodecTypes['pg/text@1']['output'] | null;
+      readonly is_active: CodecTypes['pg/bool@1']['output'];
+      readonly medicine_name: CodecTypes['pg/text@1']['output'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly scheduled_time: CodecTypes['pg/time-string@1']['output'] | null;
+      readonly start_date: CodecTypes['pg/date-string@1']['output'] | null;
+    };
+    readonly memory_journal_entries: {
+      readonly content: CodecTypes['pg/text@1']['output'];
+      readonly created_at: TimestamptzString<6>;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly mood: CodecTypes['pg/text@1']['output'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly title: CodecTypes['pg/text@1']['output'] | null;
+      readonly updated_at: TimestamptzString<6>;
+    };
+    readonly patients: {
+      readonly consent_status: CodecTypes['pg/text@1']['output'] | null;
+      readonly created_at: TimestamptzString<6>;
+      readonly date_of_birth: CodecTypes['pg/date-string@1']['output'] | null;
+      readonly deleted_at: TimestamptzString<6> | null;
+      readonly dementia_stage: CodecTypes['pg/text@1']['output'] | null;
+      readonly display_name: CodecTypes['pg/text@1']['output'];
+      readonly district: CodecTypes['pg/text@1']['output'] | null;
+      readonly emergency_contact_name: CodecTypes['pg/text@1']['output'] | null;
+      readonly emergency_contact_phone: CodecTypes['pg/text@1']['output'] | null;
+      readonly gender: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly patient_code: CodecTypes['pg/text@1']['output'];
+      readonly primary_language: CodecTypes['pg/text@1']['output'] | null;
+      readonly state: CodecTypes['pg/text@1']['output'] | null;
+      readonly updated_at: TimestamptzString<6>;
+      readonly user_id: CodecTypes['pg/uuid@1']['output'] | null;
+      readonly village: CodecTypes['pg/text@1']['output'] | null;
+    };
+    readonly safety_checkins: {
+      readonly accuracy_meters: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly checkin_type: CodecTypes['pg/text@1']['output'] | null;
+      readonly device_id: CodecTypes['pg/text@1']['output'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly latitude: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly longitude: CodecTypes['pg/numeric@1']['output'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['output'];
+      readonly recorded_at: TimestamptzString<6>;
+      readonly synced_at: TimestamptzString<6> | null;
     };
   };
 };
 export type StorageColumnInputTypes = {
   readonly public: {
-    readonly user: {
-      readonly createdAt: CodecTypes['pg/timestamptz-string@1']['input'];
+    readonly app_users: {
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
       readonly email: CodecTypes['pg/text@1']['input'];
-      readonly id: CodecTypes['pg/int4@1']['input'];
-      readonly name: CodecTypes['pg/text@1']['input'] | null;
-      readonly updatedAt: CodecTypes['pg/timestamptz-string@1']['input'];
-      readonly username: CodecTypes['pg/text@1']['input'] | null;
+      readonly full_name: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly password_hash: CodecTypes['pg/text@1']['input'];
+      readonly phone: CodecTypes['pg/text@1']['input'] | null;
+      readonly preferred_language: CodecTypes['pg/text@1']['input'] | null;
+      readonly role: CodecTypes['pg/text@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly caregiver_patients: {
+      readonly caregiver_id: CodecTypes['pg/uuid@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly is_primary: CodecTypes['pg/bool@1']['input'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly relationship: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly cognitive_performance: {
+      readonly accuracy_percent: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly average_response_ms: CodecTypes['pg/int4@1']['input'] | null;
+      readonly cognitive_domain: CodecTypes['pg/text@1']['input'];
+      readonly difficulty_level: CodecTypes['pg/int4@1']['input'] | null;
+      readonly error_rate: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly measured_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly score: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly session_id: CodecTypes['pg/uuid@1']['input'] | null;
+    };
+    readonly cultural_content: {
+      readonly category: CodecTypes['pg/text@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly deleted_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly description: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly language_code: CodecTypes['pg/text@1']['input'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['input'] | null;
+      readonly region: CodecTypes['pg/text@1']['input'] | null;
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly daily_care_logs: {
+      readonly caregiver_id: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly hydration_ml: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly meals_completed: CodecTypes['pg/int4@1']['input'] | null;
+      readonly mood: CodecTypes['pg/text@1']['input'] | null;
+      readonly notes: CodecTypes['pg/text@1']['input'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly sleepHours: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly devices: {
+      readonly appVersion: CodecTypes['pg/text@1']['input'] | null;
+      readonly caregiver_id: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly device_id: CodecTypes['pg/text@1']['input'];
+      readonly device_name: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly last_sync_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly platform: CodecTypes['pg/text@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly game_items: {
+      readonly correct_answer: CodecTypes['pg/text@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly cultural_content_id: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly deleted_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly difficulty: CodecTypes['pg/int4@1']['input'];
+      readonly game_id: CodecTypes['pg/uuid@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly is_active: CodecTypes['pg/bool@1']['input'];
+      readonly mediaIds: CodecTypes['pg/json@1']['input'] | null;
+      readonly metadata: CodecTypes['pg/json@1']['input'] | null;
+      readonly options: CodecTypes['pg/json@1']['input'] | null;
+      readonly question_text: CodecTypes['pg/text@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly game_responses: {
+      readonly answer_given: CodecTypes['pg/text@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly difficulty_at_attempt: CodecTypes['pg/int4@1']['input'] | null;
+      readonly game_item_id: CodecTypes['pg/uuid@1']['input'];
+      readonly hesitation_ms: CodecTypes['pg/int4@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly is_correct: CodecTypes['pg/bool@1']['input'] | null;
+      readonly question_number: CodecTypes['pg/int4@1']['input'] | null;
+      readonly response_time_ms: CodecTypes['pg/int4@1']['input'] | null;
+      readonly session_id: CodecTypes['pg/uuid@1']['input'];
+    };
+    readonly game_sessions: {
+      readonly average_response_ms: CodecTypes['pg/int4@1']['input'] | null;
+      readonly client_created_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly completedAt: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly correct_answers: CodecTypes['pg/int4@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly device_id: CodecTypes['pg/text@1']['input'] | null;
+      readonly final_difficulty: CodecTypes['pg/int4@1']['input'] | null;
+      readonly game_id: CodecTypes['pg/uuid@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly initial_difficulty: CodecTypes['pg/int4@1']['input'] | null;
+      readonly moodAfter: CodecTypes['pg/text@1']['input'] | null;
+      readonly moodBefore: CodecTypes['pg/text@1']['input'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly started_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly sync_status: CodecTypes['pg/text@1']['input'] | null;
+      readonly total_questions: CodecTypes['pg/int4@1']['input'] | null;
+    };
+    readonly games: {
+      readonly cognitive_domain: CodecTypes['pg/text@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly difficulty_max: CodecTypes['pg/int4@1']['input'];
+      readonly difficulty_min: CodecTypes['pg/int4@1']['input'];
+      readonly game_type: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly is_active: CodecTypes['pg/bool@1']['input'];
+      readonly language_code: CodecTypes['pg/text@1']['input'] | null;
+      readonly name: CodecTypes['pg/text@1']['input'];
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly languages: {
+      readonly code: CodecTypes['pg/text@1']['input'];
+      readonly is_active: CodecTypes['pg/bool@1']['input'];
+      readonly name: CodecTypes['pg/text@1']['input'];
+      readonly native_name: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly media_assets: {
+      readonly checksum: CodecTypes['pg/text@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly cultural_content_id: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly deleted_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly duration_seconds: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly file_name: CodecTypes['pg/text@1']['input'];
+      readonly file_size_bytes: CodecTypes['pg/int8@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly local_file_key: CodecTypes['pg/text@1']['input'] | null;
+      readonly media_type: CodecTypes['pg/text@1']['input'];
+      readonly storage_url: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly medication_logs: {
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly medication_id: CodecTypes['pg/uuid@1']['input'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly status: CodecTypes['pg/text@1']['input'];
+      readonly taken_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+    };
+    readonly medications: {
+      readonly dosage: CodecTypes['pg/text@1']['input'] | null;
+      readonly end_date: CodecTypes['pg/date-string@1']['input'] | null;
+      readonly frequency: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly instructions: CodecTypes['pg/text@1']['input'] | null;
+      readonly is_active: CodecTypes['pg/bool@1']['input'];
+      readonly medicine_name: CodecTypes['pg/text@1']['input'];
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly scheduled_time: CodecTypes['pg/time-string@1']['input'] | null;
+      readonly start_date: CodecTypes['pg/date-string@1']['input'] | null;
+    };
+    readonly memory_journal_entries: {
+      readonly content: CodecTypes['pg/text@1']['input'];
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly mood: CodecTypes['pg/text@1']['input'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly title: CodecTypes['pg/text@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+    };
+    readonly patients: {
+      readonly consent_status: CodecTypes['pg/text@1']['input'] | null;
+      readonly created_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly date_of_birth: CodecTypes['pg/date-string@1']['input'] | null;
+      readonly deleted_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
+      readonly dementia_stage: CodecTypes['pg/text@1']['input'] | null;
+      readonly display_name: CodecTypes['pg/text@1']['input'];
+      readonly district: CodecTypes['pg/text@1']['input'] | null;
+      readonly emergency_contact_name: CodecTypes['pg/text@1']['input'] | null;
+      readonly emergency_contact_phone: CodecTypes['pg/text@1']['input'] | null;
+      readonly gender: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly patient_code: CodecTypes['pg/text@1']['input'];
+      readonly primary_language: CodecTypes['pg/text@1']['input'] | null;
+      readonly state: CodecTypes['pg/text@1']['input'] | null;
+      readonly updated_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly user_id: CodecTypes['pg/uuid@1']['input'] | null;
+      readonly village: CodecTypes['pg/text@1']['input'] | null;
+    };
+    readonly safety_checkins: {
+      readonly accuracy_meters: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly checkin_type: CodecTypes['pg/text@1']['input'] | null;
+      readonly device_id: CodecTypes['pg/text@1']['input'] | null;
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly latitude: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly longitude: CodecTypes['pg/numeric@1']['input'] | null;
+      readonly patient_id: CodecTypes['pg/uuid@1']['input'];
+      readonly recorded_at: CodecTypes['pg/timestamptz-string@1']['input'];
+      readonly synced_at: CodecTypes['pg/timestamptz-string@1']['input'] | null;
     };
   };
 };
 
 export namespace Models {
   export type public_User = {
-    id: CodecTypes['pg/int4@1']['output'];
+    id: CodecTypes['pg/uuid@1']['output'];
+    fullName: CodecTypes['pg/text@1']['output'];
+    phone: CodecTypes['pg/text@1']['output'] | null;
     email: CodecTypes['pg/text@1']['output'];
-    username: CodecTypes['pg/text@1']['output'] | null;
-    name: CodecTypes['pg/text@1']['output'] | null;
-    createdAt: CodecTypes['pg/timestamptz-string@1']['output'];
-    updatedAt: CodecTypes['pg/timestamptz-string@1']['output'];
+    role: CodecTypes['pg/text@1']['output'];
+    passwordHash: CodecTypes['pg/text@1']['output'];
+    preferredLanguage: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    caregiverPatients: public_CaregiverPatient[];
+    dailyCareLogs: public_DailyCareLog[];
+    devices: public_Device[];
+    patientProfile: public_Patient | null;
+    readonly [RelationKeys]?: 'caregiverPatients' | 'dailyCareLogs' | 'devices' | 'patientProfile';
+  };
+  export type public_Patient = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    userId: CodecTypes['pg/uuid@1']['output'] | null;
+    patientCode: CodecTypes['pg/text@1']['output'];
+    displayName: CodecTypes['pg/text@1']['output'];
+    dateOfBirth: CodecTypes['pg/date-string@1']['output'] | null;
+    gender: CodecTypes['pg/text@1']['output'] | null;
+    primaryLanguage: CodecTypes['pg/text@1']['output'] | null;
+    state: CodecTypes['pg/text@1']['output'] | null;
+    district: CodecTypes['pg/text@1']['output'] | null;
+    village: CodecTypes['pg/text@1']['output'] | null;
+    dementiaStage: CodecTypes['pg/text@1']['output'] | null;
+    emergencyContactName: CodecTypes['pg/text@1']['output'] | null;
+    emergencyContactPhone: CodecTypes['pg/text@1']['output'] | null;
+    consentStatus: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    deletedAt: TimestamptzString<6> | null;
+    caregiverPatients: public_CaregiverPatient[];
+    cognitivePerformance: public_CognitivePerformance[];
+    dailyCareLogs: public_DailyCareLog[];
+    devices: public_Device[];
+    gameSessions: public_GameSession[];
+    medicationLogs: public_MedicationLog[];
+    medications: public_Medication[];
+    safetyCheckins: public_SafetyCheckin[];
+    user: public_User | null;
+    readonly [RelationKeys]?:
+      | 'caregiverPatients'
+      | 'cognitivePerformance'
+      | 'dailyCareLogs'
+      | 'devices'
+      | 'gameSessions'
+      | 'medicationLogs'
+      | 'medications'
+      | 'safetyCheckins'
+      | 'user';
+  };
+  export type public_CaregiverPatient = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    caregiverId: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    relationship: CodecTypes['pg/text@1']['output'] | null;
+    isPrimary: CodecTypes['pg/bool@1']['output'];
+    createdAt: TimestamptzString<6>;
+    caregiver: public_User;
+    patient: public_Patient;
+    readonly [RelationKeys]?: 'caregiver' | 'patient';
+  };
+  export type public_CognitivePerformance = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    sessionId: CodecTypes['pg/uuid@1']['output'] | null;
+    cognitiveDomain: CodecTypes['pg/text@1']['output'];
+    score: CodecTypes['pg/numeric@1']['output'] | null;
+    accuracyPercent: CodecTypes['pg/numeric@1']['output'] | null;
+    averageResponseMs: CodecTypes['pg/int4@1']['output'] | null;
+    errorRate: CodecTypes['pg/numeric@1']['output'] | null;
+    difficultyLevel: CodecTypes['pg/int4@1']['output'] | null;
+    measuredAt: TimestamptzString<6>;
+    patient: public_Patient;
+    session: public_GameSession | null;
+    readonly [RelationKeys]?: 'patient' | 'session';
+  };
+  export type public_CulturalContent = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    title: CodecTypes['pg/text@1']['output'];
+    category: CodecTypes['pg/text@1']['output'];
+    region: CodecTypes['pg/text@1']['output'] | null;
+    languageCode: CodecTypes['pg/text@1']['output'] | null;
+    description: CodecTypes['pg/text@1']['output'] | null;
+    metadata: CodecTypes['pg/json@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    deletedAt: TimestamptzString<6> | null;
+    gameItems: public_GameItem[];
+    mediaAssets: public_MediaAsset[];
+    readonly [RelationKeys]?: 'gameItems' | 'mediaAssets';
+  };
+  export type public_DailyCareLog = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    caregiverId: CodecTypes['pg/uuid@1']['output'] | null;
+    mood: CodecTypes['pg/text@1']['output'] | null;
+    hydrationMl: CodecTypes['pg/int4@1']['output'] | null;
+    mealsCompleted: CodecTypes['pg/int4@1']['output'] | null;
+    sleepHours: CodecTypes['pg/numeric@1']['output'] | null;
+    notes: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    caregiver: public_User | null;
+    patient: public_Patient;
+    readonly [RelationKeys]?: 'caregiver' | 'patient';
+  };
+  export type public_Device = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    deviceId: CodecTypes['pg/text@1']['output'];
+    deviceName: CodecTypes['pg/text@1']['output'] | null;
+    platform: CodecTypes['pg/text@1']['output'] | null;
+    appVersion: CodecTypes['pg/text@1']['output'] | null;
+    patientId: CodecTypes['pg/uuid@1']['output'] | null;
+    caregiverId: CodecTypes['pg/uuid@1']['output'] | null;
+    lastSyncAt: TimestamptzString<6> | null;
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    caregiver: public_User | null;
+    patient: public_Patient | null;
+    readonly [RelationKeys]?: 'caregiver' | 'patient';
+  };
+  export type public_Game = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    name: CodecTypes['pg/text@1']['output'];
+    gameType: CodecTypes['pg/text@1']['output'];
+    cognitiveDomain: CodecTypes['pg/text@1']['output'] | null;
+    difficultyMin: CodecTypes['pg/int4@1']['output'];
+    difficultyMax: CodecTypes['pg/int4@1']['output'];
+    languageCode: CodecTypes['pg/text@1']['output'] | null;
+    isActive: CodecTypes['pg/bool@1']['output'];
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    gameItems: public_GameItem[];
+    gameSessions: public_GameSession[];
+    readonly [RelationKeys]?: 'gameItems' | 'gameSessions';
+  };
+  export type public_GameItem = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    gameId: CodecTypes['pg/uuid@1']['output'];
+    culturalContentId: CodecTypes['pg/uuid@1']['output'] | null;
+    questionText: CodecTypes['pg/text@1']['output'] | null;
+    difficulty: CodecTypes['pg/int4@1']['output'];
+    correctAnswer: CodecTypes['pg/text@1']['output'] | null;
+    options: CodecTypes['pg/json@1']['output'] | null;
+    mediaIds: CodecTypes['pg/json@1']['output'] | null;
+    metadata: CodecTypes['pg/json@1']['output'] | null;
+    isActive: CodecTypes['pg/bool@1']['output'];
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    deletedAt: TimestamptzString<6> | null;
+    culturalContent: public_CulturalContent | null;
+    game: public_Game;
+    gameResponses: public_GameResponse[];
+    readonly [RelationKeys]?: 'culturalContent' | 'game' | 'gameResponses';
+  };
+  export type public_GameResponse = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    sessionId: CodecTypes['pg/uuid@1']['output'];
+    gameItemId: CodecTypes['pg/uuid@1']['output'];
+    questionNumber: CodecTypes['pg/int4@1']['output'] | null;
+    answerGiven: CodecTypes['pg/text@1']['output'] | null;
+    isCorrect: CodecTypes['pg/bool@1']['output'] | null;
+    responseTimeMs: CodecTypes['pg/int4@1']['output'] | null;
+    hesitationMs: CodecTypes['pg/int4@1']['output'] | null;
+    difficultyAtAttempt: CodecTypes['pg/int4@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    gameItem: public_GameItem;
+    session: public_GameSession;
+    readonly [RelationKeys]?: 'gameItem' | 'session';
+  };
+  export type public_GameSession = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    gameId: CodecTypes['pg/uuid@1']['output'];
+    deviceId: CodecTypes['pg/text@1']['output'] | null;
+    startedAt: TimestamptzString<6>;
+    completedAt: TimestamptzString<6> | null;
+    initialDifficulty: CodecTypes['pg/int4@1']['output'] | null;
+    finalDifficulty: CodecTypes['pg/int4@1']['output'] | null;
+    totalQuestions: CodecTypes['pg/int4@1']['output'] | null;
+    correctAnswers: CodecTypes['pg/int4@1']['output'] | null;
+    averageResponseMs: CodecTypes['pg/int4@1']['output'] | null;
+    moodBefore: CodecTypes['pg/text@1']['output'] | null;
+    moodAfter: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    clientCreatedAt: TimestamptzString<6> | null;
+    syncStatus: CodecTypes['pg/text@1']['output'] | null;
+    cognitivePerformance: public_CognitivePerformance[];
+    game: public_Game;
+    patient: public_Patient;
+    responses: public_GameResponse[];
+    readonly [RelationKeys]?: 'cognitivePerformance' | 'game' | 'patient' | 'responses';
+  };
+  export type public_Language = {
+    code: CodecTypes['pg/text@1']['output'];
+    name: CodecTypes['pg/text@1']['output'];
+    nativeName: CodecTypes['pg/text@1']['output'] | null;
+    isActive: CodecTypes['pg/bool@1']['output'];
     readonly [RelationKeys]?: never;
+  };
+  export type public_MediaAsset = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    mediaType: CodecTypes['pg/text@1']['output'];
+    fileName: CodecTypes['pg/text@1']['output'];
+    storageUrl: CodecTypes['pg/text@1']['output'] | null;
+    localFileKey: CodecTypes['pg/text@1']['output'] | null;
+    durationSeconds: CodecTypes['pg/numeric@1']['output'] | null;
+    fileSizeBytes: CodecTypes['pg/int8@1']['output'] | null;
+    checksum: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    deletedAt: TimestamptzString<6> | null;
+    culturalContentId: CodecTypes['pg/uuid@1']['output'] | null;
+    culturalContent: public_CulturalContent | null;
+    readonly [RelationKeys]?: 'culturalContent';
+  };
+  export type public_Medication = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    medicineName: CodecTypes['pg/text@1']['output'];
+    dosage: CodecTypes['pg/text@1']['output'] | null;
+    frequency: CodecTypes['pg/text@1']['output'] | null;
+    scheduledTime: CodecTypes['pg/time-string@1']['output'] | null;
+    startDate: CodecTypes['pg/date-string@1']['output'] | null;
+    endDate: CodecTypes['pg/date-string@1']['output'] | null;
+    instructions: CodecTypes['pg/text@1']['output'] | null;
+    isActive: CodecTypes['pg/bool@1']['output'];
+    medicationLogs: public_MedicationLog[];
+    patient: public_Patient;
+    readonly [RelationKeys]?: 'medicationLogs' | 'patient';
+  };
+  export type public_MedicationLog = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    medicationId: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    takenAt: TimestamptzString<6> | null;
+    status: CodecTypes['pg/text@1']['output'];
+    createdAt: TimestamptzString<6>;
+    medication: public_Medication;
+    patient: public_Patient;
+    readonly [RelationKeys]?: 'medication' | 'patient';
+  };
+  export type public_SafetyCheckin = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    deviceId: CodecTypes['pg/text@1']['output'] | null;
+    latitude: CodecTypes['pg/numeric@1']['output'] | null;
+    longitude: CodecTypes['pg/numeric@1']['output'] | null;
+    accuracyMeters: CodecTypes['pg/numeric@1']['output'] | null;
+    checkinType: CodecTypes['pg/text@1']['output'] | null;
+    syncedAt: TimestamptzString<6> | null;
+    recordedAt: TimestamptzString<6>;
+    patient: public_Patient;
+    readonly [RelationKeys]?: 'patient';
+  };
+  export type public_MemoryJournal = {
+    id: CodecTypes['pg/uuid@1']['output'];
+    patientId: CodecTypes['pg/uuid@1']['output'];
+    title: CodecTypes['pg/text@1']['output'] | null;
+    content: CodecTypes['pg/text@1']['output'];
+    mood: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: TimestamptzString<6>;
+    updatedAt: TimestamptzString<6>;
+    patient: public_Patient;
+    readonly [RelationKeys]?: 'patient';
   };
 }
 
 export declare const models: {
   public: {
     User: Models.public_User;
+    Patient: Models.public_Patient;
+    CaregiverPatient: Models.public_CaregiverPatient;
+    CognitivePerformance: Models.public_CognitivePerformance;
+    CulturalContent: Models.public_CulturalContent;
+    DailyCareLog: Models.public_DailyCareLog;
+    Device: Models.public_Device;
+    Game: Models.public_Game;
+    GameItem: Models.public_GameItem;
+    GameResponse: Models.public_GameResponse;
+    GameSession: Models.public_GameSession;
+    Language: Models.public_Language;
+    MediaAsset: Models.public_MediaAsset;
+    Medication: Models.public_Medication;
+    MedicationLog: Models.public_MedicationLog;
+    SafetyCheckin: Models.public_SafetyCheckin;
+    MemoryJournal: Models.public_MemoryJournal;
   };
 };
 
@@ -325,48 +1376,1567 @@ type ContractBase = Omit<
         readonly kind: 'postgres-schema';
         readonly entries: {
           readonly table: {
-            readonly user: {
+            readonly app_users: {
               columns: {
                 readonly id: {
-                  readonly nativeType: 'int4';
-                  readonly codecId: 'pg/int4@1';
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
                   readonly nullable: false;
                   readonly default: {
                     readonly kind: 'function';
-                    readonly expression: 'autoincrement()';
+                    readonly expression: 'gen_random_uuid()';
                   };
+                };
+                readonly full_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly phone: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
                 };
                 readonly email: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: false;
                 };
-                readonly username: {
+                readonly role: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly password_hash: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly preferred_language: {
                   readonly nativeType: 'text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: true;
                 };
-                readonly name: {
-                  readonly nativeType: 'text';
-                  readonly codecId: 'pg/text@1';
-                  readonly nullable: true;
-                };
-                readonly createdAt: {
+                readonly created_at: {
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
                   readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
                 };
-                readonly updatedAt: {
+                readonly updated_at: {
                   readonly nativeType: 'timestamptz';
                   readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
                 };
               };
               primaryKey: { readonly columns: readonly ['id'] };
               uniques: readonly [{ readonly columns: readonly ['email'] }];
               indexes: readonly [];
               foreignKeys: readonly [];
+            };
+            readonly caregiver_patients: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly caregiver_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly relationship: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly is_primary: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', false>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [{ readonly columns: readonly ['caregiver_id', 'patient_id'] }];
+              indexes: readonly [
+                {
+                  readonly name: 'caregiver_patients_caregiver_id_idx_d0c50cfd';
+                  readonly prefix: 'caregiver_patients_caregiver_id_idx';
+                  readonly columns: readonly ['caregiver_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'caregiver_patients_patient_id_idx_2f641dda';
+                  readonly prefix: 'caregiver_patients_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'caregiver_patients';
+                    readonly columns: readonly ['caregiver_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'app_users';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'caregiver_patients';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly cognitive_performance: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly session_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly cognitive_domain: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly score: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly accuracy_percent: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly average_response_ms: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly error_rate: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly difficulty_level: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly measured_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'cognitive_performance_patient_id_idx_2f641dda';
+                  readonly prefix: 'cognitive_performance_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'cognitive_performance_session_id_idx_00ba47bf';
+                  readonly prefix: 'cognitive_performance_session_id_idx';
+                  readonly columns: readonly ['session_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cognitive_performance';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cognitive_performance';
+                    readonly columns: readonly ['session_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_sessions';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly cultural_content: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly title: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly category: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly region: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly language_code: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly description: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly metadata: {
+                  readonly nativeType: 'json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/json@1', '{}'>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly deleted_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
+            readonly daily_care_logs: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly caregiver_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly mood: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly hydration_ml: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly meals_completed: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly sleepHours: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly notes: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'daily_care_logs_patient_id_idx_2f641dda';
+                  readonly prefix: 'daily_care_logs_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'daily_care_logs_caregiver_id_idx_d0c50cfd';
+                  readonly prefix: 'daily_care_logs_caregiver_id_idx';
+                  readonly columns: readonly ['caregiver_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'daily_care_logs';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'daily_care_logs';
+                    readonly columns: readonly ['caregiver_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'app_users';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly devices: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly device_id: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly device_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly platform: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly appVersion: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly caregiver_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly last_sync_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'devices_patient_id_idx_2f641dda';
+                  readonly prefix: 'devices_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'devices_caregiver_id_idx_d0c50cfd';
+                  readonly prefix: 'devices_caregiver_id_idx';
+                  readonly columns: readonly ['caregiver_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'devices';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'devices';
+                    readonly columns: readonly ['caregiver_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'app_users';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly game_items: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly game_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly cultural_content_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly question_text: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly difficulty: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 1>;
+                  };
+                };
+                readonly correct_answer: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly options: {
+                  readonly nativeType: 'json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/json@1', '[]'>;
+                  };
+                };
+                readonly mediaIds: {
+                  readonly nativeType: 'json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/json@1', '[]'>;
+                  };
+                };
+                readonly metadata: {
+                  readonly nativeType: 'json';
+                  readonly codecId: 'pg/json@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/json@1', '{}'>;
+                  };
+                };
+                readonly is_active: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly deleted_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'game_items_game_id_idx_aa9dd7a6';
+                  readonly prefix: 'game_items_game_id_idx';
+                  readonly columns: readonly ['game_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'game_items_cultural_content_id_idx_d92a4b0a';
+                  readonly prefix: 'game_items_cultural_content_id_idx';
+                  readonly columns: readonly ['cultural_content_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_items';
+                    readonly columns: readonly ['game_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'games';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_items';
+                    readonly columns: readonly ['cultural_content_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cultural_content';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly game_responses: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly session_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly game_item_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly question_number: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly answer_given: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly is_correct: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: true;
+                };
+                readonly response_time_ms: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly hesitation_ms: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly difficulty_at_attempt: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'game_responses_session_id_idx_00ba47bf';
+                  readonly prefix: 'game_responses_session_id_idx';
+                  readonly columns: readonly ['session_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'game_responses_game_item_id_idx_ac0102a4';
+                  readonly prefix: 'game_responses_game_item_id_idx';
+                  readonly columns: readonly ['game_item_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_responses';
+                    readonly columns: readonly ['session_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_sessions';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_responses';
+                    readonly columns: readonly ['game_item_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_items';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly game_sessions: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly game_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly device_id: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly started_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly completedAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly initial_difficulty: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly final_difficulty: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly total_questions: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly correct_answers: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                };
+                readonly average_response_ms: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                };
+                readonly moodBefore: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly moodAfter: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly client_created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly sync_status: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'pending'>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'game_sessions_patient_id_idx_2f641dda';
+                  readonly prefix: 'game_sessions_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'game_sessions_game_id_idx_aa9dd7a6';
+                  readonly prefix: 'game_sessions_game_id_idx';
+                  readonly columns: readonly ['game_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_sessions';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'game_sessions';
+                    readonly columns: readonly ['game_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'games';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly games: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly game_type: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly cognitive_domain: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly difficulty_min: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 1>;
+                  };
+                };
+                readonly difficulty_max: {
+                  readonly nativeType: 'int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 5>;
+                  };
+                };
+                readonly language_code: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly is_active: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
+            readonly languages: {
+              columns: {
+                readonly code: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly native_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly is_active: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['code'] };
+              uniques: readonly [];
+              indexes: readonly [];
+              foreignKeys: readonly [];
+            };
+            readonly media_assets: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly media_type: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly file_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly storage_url: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly local_file_key: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly duration_seconds: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly file_size_bytes: {
+                  readonly nativeType: 'int8';
+                  readonly codecId: 'pg/int8@1';
+                  readonly nullable: true;
+                };
+                readonly checksum: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly deleted_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly cultural_content_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'media_assets_cultural_content_id_idx_d92a4b0a';
+                  readonly prefix: 'media_assets_cultural_content_id_idx';
+                  readonly columns: readonly ['cultural_content_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'media_assets';
+                    readonly columns: readonly ['cultural_content_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'cultural_content';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly medication_logs: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly medication_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly taken_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly status: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'pending'>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'medication_logs_medication_id_idx_7ed34ddc';
+                  readonly prefix: 'medication_logs_medication_id_idx';
+                  readonly columns: readonly ['medication_id'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'medication_logs_patient_id_idx_2f641dda';
+                  readonly prefix: 'medication_logs_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'medication_logs';
+                    readonly columns: readonly ['medication_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'medications';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'medication_logs';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly medications: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly medicine_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly dosage: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly frequency: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly scheduled_time: {
+                  readonly nativeType: 'time';
+                  readonly codecId: 'pg/time-string@1';
+                  readonly nullable: true;
+                };
+                readonly start_date: {
+                  readonly nativeType: 'date';
+                  readonly codecId: 'pg/date-string@1';
+                  readonly nullable: true;
+                };
+                readonly end_date: {
+                  readonly nativeType: 'date';
+                  readonly codecId: 'pg/date-string@1';
+                  readonly nullable: true;
+                };
+                readonly instructions: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly is_active: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'medications_patient_id_idx_2f641dda';
+                  readonly prefix: 'medications_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'medications';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly memory_journal_entries: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly title: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly content: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly mood: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'memory_journal_entries_patient_id_idx_2f641dda';
+                  readonly prefix: 'memory_journal_entries_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'memory_journal_entries';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly patients: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly user_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: true;
+                };
+                readonly patient_code: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly display_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly date_of_birth: {
+                  readonly nativeType: 'date';
+                  readonly codecId: 'pg/date-string@1';
+                  readonly nullable: true;
+                };
+                readonly gender: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly primary_language: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly state: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly district: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly village: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly dementia_stage: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly emergency_contact_name: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly emergency_contact_phone: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly consent_status: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'pending'>;
+                  };
+                };
+                readonly created_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly updated_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly deleted_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [{ readonly columns: readonly ['user_id'] }];
+              indexes: readonly [];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['user_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'app_users';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly safety_checkins: {
+              columns: {
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'gen_random_uuid()';
+                  };
+                };
+                readonly patient_id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly device_id: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly latitude: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly longitude: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly accuracy_meters: {
+                  readonly nativeType: 'numeric';
+                  readonly codecId: 'pg/numeric@1';
+                  readonly nullable: true;
+                };
+                readonly checkin_type: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly synced_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 6 };
+                };
+                readonly recorded_at: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'safety_checkins_patient_id_idx_2f641dda';
+                  readonly prefix: 'safety_checkins_patient_id_idx';
+                  readonly columns: readonly ['patient_id'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'safety_checkins';
+                    readonly columns: readonly ['patient_id'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'patients';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
             };
           };
         };
@@ -379,27 +2949,345 @@ type ContractBase = Omit<
   readonly target: 'postgres';
   readonly targetFamily: 'sql';
   readonly roots: {
-    readonly user: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+    readonly app_users: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+    readonly patients: { readonly namespace: 'public' & NamespaceId; readonly model: 'Patient' };
+    readonly caregiver_patients: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'CaregiverPatient';
+    };
+    readonly cognitive_performance: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'CognitivePerformance';
+    };
+    readonly cultural_content: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'CulturalContent';
+    };
+    readonly daily_care_logs: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'DailyCareLog';
+    };
+    readonly devices: { readonly namespace: 'public' & NamespaceId; readonly model: 'Device' };
+    readonly games: { readonly namespace: 'public' & NamespaceId; readonly model: 'Game' };
+    readonly game_items: { readonly namespace: 'public' & NamespaceId; readonly model: 'GameItem' };
+    readonly game_responses: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'GameResponse';
+    };
+    readonly game_sessions: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'GameSession';
+    };
+    readonly languages: { readonly namespace: 'public' & NamespaceId; readonly model: 'Language' };
+    readonly media_assets: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MediaAsset';
+    };
+    readonly medications: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'Medication';
+    };
+    readonly medication_logs: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MedicationLog';
+    };
+    readonly safety_checkins: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'SafetyCheckin';
+    };
+    readonly memory_journal_entries: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MemoryJournal';
+    };
   };
   readonly domain: {
     readonly namespaces: {
       readonly public: {
         readonly models: {
-          readonly User: {
+          readonly CaregiverPatient: {
             readonly fields: {
               readonly id: {
                 readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
-              readonly email: {
+              readonly caregiverId: {
                 readonly nullable: false;
-                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
               };
-              readonly username: {
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly relationship: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly name: {
+              readonly isPrimary: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly caregiver: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['caregiverId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'caregiver_patients';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly caregiverId: { readonly column: 'caregiver_id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly relationship: { readonly column: 'relationship' };
+                readonly isPrimary: { readonly column: 'is_primary' };
+                readonly createdAt: { readonly column: 'created_at' };
+              };
+            };
+          };
+          readonly CognitivePerformance: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly sessionId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly cognitiveDomain: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly score: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly accuracyPercent: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly averageResponseMs: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly errorRate: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly difficultyLevel: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly measuredAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly session: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameSession';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['sessionId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cognitive_performance';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly sessionId: { readonly column: 'session_id' };
+                readonly cognitiveDomain: { readonly column: 'cognitive_domain' };
+                readonly score: { readonly column: 'score' };
+                readonly accuracyPercent: { readonly column: 'accuracy_percent' };
+                readonly averageResponseMs: { readonly column: 'average_response_ms' };
+                readonly errorRate: { readonly column: 'error_rate' };
+                readonly difficultyLevel: { readonly column: 'difficulty_level' };
+                readonly measuredAt: { readonly column: 'measured_at' };
+              };
+            };
+          };
+          readonly CulturalContent: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly title: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly category: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly region: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly languageCode: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly description: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly metadata: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly deletedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly gameItems: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameItem';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['culturalContentId'];
+                };
+              };
+              readonly mediaAssets: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MediaAsset';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['culturalContentId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'cultural_content';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly title: { readonly column: 'title' };
+                readonly category: { readonly column: 'category' };
+                readonly region: { readonly column: 'region' };
+                readonly languageCode: { readonly column: 'language_code' };
+                readonly description: { readonly column: 'description' };
+                readonly metadata: { readonly column: 'metadata' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+                readonly deletedAt: { readonly column: 'deleted_at' };
+              };
+            };
+          };
+          readonly DailyCareLog: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly caregiverId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly mood: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly hydrationMl: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly mealsCompleted: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly sleepHours: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly notes: {
                 readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
@@ -408,6 +3296,7 @@ type ContractBase = Omit<
                 readonly type: {
                   readonly kind: 'scalar';
                   readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
                 };
               };
               readonly updatedAt: {
@@ -415,20 +3304,1333 @@ type ContractBase = Omit<
                 readonly type: {
                   readonly kind: 'scalar';
                   readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
                 };
+              };
+            };
+            readonly relations: {
+              readonly caregiver: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['caregiverId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'daily_care_logs';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly caregiverId: { readonly column: 'caregiver_id' };
+                readonly mood: { readonly column: 'mood' };
+                readonly hydrationMl: { readonly column: 'hydration_ml' };
+                readonly mealsCompleted: { readonly column: 'meals_completed' };
+                readonly sleepHours: { readonly column: 'sleepHours' };
+                readonly notes: { readonly column: 'notes' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly Device: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly deviceId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly deviceName: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly platform: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly appVersion: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly patientId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly caregiverId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly lastSyncAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly caregiver: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['caregiverId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'devices';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly deviceId: { readonly column: 'device_id' };
+                readonly deviceName: { readonly column: 'device_name' };
+                readonly platform: { readonly column: 'platform' };
+                readonly appVersion: { readonly column: 'appVersion' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly caregiverId: { readonly column: 'caregiver_id' };
+                readonly lastSyncAt: { readonly column: 'last_sync_at' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly Game: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly name: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly gameType: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly cognitiveDomain: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly difficultyMin: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly difficultyMax: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly languageCode: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly isActive: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly gameItems: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameItem';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['gameId'];
+                };
+              };
+              readonly gameSessions: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameSession';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['gameId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'games';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly name: { readonly column: 'name' };
+                readonly gameType: { readonly column: 'game_type' };
+                readonly cognitiveDomain: { readonly column: 'cognitive_domain' };
+                readonly difficultyMin: { readonly column: 'difficulty_min' };
+                readonly difficultyMax: { readonly column: 'difficulty_max' };
+                readonly languageCode: { readonly column: 'language_code' };
+                readonly isActive: { readonly column: 'is_active' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly GameItem: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly gameId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly culturalContentId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly questionText: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly difficulty: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly correctAnswer: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly options: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly mediaIds: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly metadata: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/json@1' };
+              };
+              readonly isActive: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly deletedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly culturalContent: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CulturalContent';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['culturalContentId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly game: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Game' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['gameId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly gameResponses: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameResponse';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['gameItemId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'game_items';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly gameId: { readonly column: 'game_id' };
+                readonly culturalContentId: { readonly column: 'cultural_content_id' };
+                readonly questionText: { readonly column: 'question_text' };
+                readonly difficulty: { readonly column: 'difficulty' };
+                readonly correctAnswer: { readonly column: 'correct_answer' };
+                readonly options: { readonly column: 'options' };
+                readonly mediaIds: { readonly column: 'mediaIds' };
+                readonly metadata: { readonly column: 'metadata' };
+                readonly isActive: { readonly column: 'is_active' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+                readonly deletedAt: { readonly column: 'deleted_at' };
+              };
+            };
+          };
+          readonly GameResponse: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly sessionId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly gameItemId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly questionNumber: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly answerGiven: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly isCorrect: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly responseTimeMs: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly hesitationMs: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly difficultyAtAttempt: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly gameItem: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameItem';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['gameItemId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly session: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameSession';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['sessionId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'game_responses';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly sessionId: { readonly column: 'session_id' };
+                readonly gameItemId: { readonly column: 'game_item_id' };
+                readonly questionNumber: { readonly column: 'question_number' };
+                readonly answerGiven: { readonly column: 'answer_given' };
+                readonly isCorrect: { readonly column: 'is_correct' };
+                readonly responseTimeMs: { readonly column: 'response_time_ms' };
+                readonly hesitationMs: { readonly column: 'hesitation_ms' };
+                readonly difficultyAtAttempt: { readonly column: 'difficulty_at_attempt' };
+                readonly createdAt: { readonly column: 'created_at' };
+              };
+            };
+          };
+          readonly GameSession: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly gameId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly deviceId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly startedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly completedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly initialDifficulty: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly finalDifficulty: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly totalQuestions: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly correctAnswers: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly averageResponseMs: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly moodBefore: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly moodAfter: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly clientCreatedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly syncStatus: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly cognitivePerformance: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CognitivePerformance';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['sessionId'];
+                };
+              };
+              readonly game: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'Game' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['gameId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly responses: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameResponse';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['sessionId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'game_sessions';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly gameId: { readonly column: 'game_id' };
+                readonly deviceId: { readonly column: 'device_id' };
+                readonly startedAt: { readonly column: 'started_at' };
+                readonly completedAt: { readonly column: 'completedAt' };
+                readonly initialDifficulty: { readonly column: 'initial_difficulty' };
+                readonly finalDifficulty: { readonly column: 'final_difficulty' };
+                readonly totalQuestions: { readonly column: 'total_questions' };
+                readonly correctAnswers: { readonly column: 'correct_answers' };
+                readonly averageResponseMs: { readonly column: 'average_response_ms' };
+                readonly moodBefore: { readonly column: 'moodBefore' };
+                readonly moodAfter: { readonly column: 'moodAfter' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly clientCreatedAt: { readonly column: 'client_created_at' };
+                readonly syncStatus: { readonly column: 'sync_status' };
+              };
+            };
+          };
+          readonly Language: {
+            readonly fields: {
+              readonly code: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly name: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly nativeName: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly isActive: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
               };
             };
             readonly relations: Record<string, never>;
             readonly storage: {
-              readonly table: 'user';
+              readonly table: 'languages';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly code: { readonly column: 'code' };
+                readonly name: { readonly column: 'name' };
+                readonly nativeName: { readonly column: 'native_name' };
+                readonly isActive: { readonly column: 'is_active' };
+              };
+            };
+          };
+          readonly MediaAsset: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly mediaType: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly fileName: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly storageUrl: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly localFileKey: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly durationSeconds: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly fileSizeBytes: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int8@1' };
+              };
+              readonly checksum: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly deletedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly culturalContentId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+            };
+            readonly relations: {
+              readonly culturalContent: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CulturalContent';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['culturalContentId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'media_assets';
               readonly namespaceId: 'public';
               readonly fields: {
                 readonly id: { readonly column: 'id' };
+                readonly mediaType: { readonly column: 'media_type' };
+                readonly fileName: { readonly column: 'file_name' };
+                readonly storageUrl: { readonly column: 'storage_url' };
+                readonly localFileKey: { readonly column: 'local_file_key' };
+                readonly durationSeconds: { readonly column: 'duration_seconds' };
+                readonly fileSizeBytes: { readonly column: 'file_size_bytes' };
+                readonly checksum: { readonly column: 'checksum' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly deletedAt: { readonly column: 'deleted_at' };
+                readonly culturalContentId: { readonly column: 'cultural_content_id' };
+              };
+            };
+          };
+          readonly Medication: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly medicineName: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly dosage: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly frequency: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly scheduledTime: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/time-string@1' };
+              };
+              readonly startDate: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/date-string@1' };
+              };
+              readonly endDate: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/date-string@1' };
+              };
+              readonly instructions: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly isActive: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+            };
+            readonly relations: {
+              readonly medicationLogs: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MedicationLog';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['medicationId'];
+                };
+              };
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'medications';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly medicineName: { readonly column: 'medicine_name' };
+                readonly dosage: { readonly column: 'dosage' };
+                readonly frequency: { readonly column: 'frequency' };
+                readonly scheduledTime: { readonly column: 'scheduled_time' };
+                readonly startDate: { readonly column: 'start_date' };
+                readonly endDate: { readonly column: 'end_date' };
+                readonly instructions: { readonly column: 'instructions' };
+                readonly isActive: { readonly column: 'is_active' };
+              };
+            };
+          };
+          readonly MedicationLog: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly medicationId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly takenAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly medication: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Medication';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['medicationId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'medication_logs';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly medicationId: { readonly column: 'medication_id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly takenAt: { readonly column: 'taken_at' };
+                readonly status: { readonly column: 'status' };
+                readonly createdAt: { readonly column: 'created_at' };
+              };
+            };
+          };
+          readonly MemoryJournal: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly title: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly content: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly mood: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'memory_journal_entries';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly title: { readonly column: 'title' };
+                readonly content: { readonly column: 'content' };
+                readonly mood: { readonly column: 'mood' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+              };
+            };
+          };
+          readonly Patient: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly userId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientCode: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly displayName: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly dateOfBirth: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/date-string@1' };
+              };
+              readonly gender: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly primaryLanguage: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly state: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly district: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly village: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly dementiaStage: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly emergencyContactName: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly emergencyContactPhone: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly consentStatus: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly deletedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly caregiverPatients: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CaregiverPatient';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly cognitivePerformance: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CognitivePerformance';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly dailyCareLogs: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'DailyCareLog';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly devices: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Device';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly gameSessions: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'GameSession';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly medicationLogs: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MedicationLog';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly medications: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Medication';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly safetyCheckins: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'SafetyCheckin';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['patientId'];
+                };
+              };
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'patients';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly userId: { readonly column: 'user_id' };
+                readonly patientCode: { readonly column: 'patient_code' };
+                readonly displayName: { readonly column: 'display_name' };
+                readonly dateOfBirth: { readonly column: 'date_of_birth' };
+                readonly gender: { readonly column: 'gender' };
+                readonly primaryLanguage: { readonly column: 'primary_language' };
+                readonly state: { readonly column: 'state' };
+                readonly district: { readonly column: 'district' };
+                readonly village: { readonly column: 'village' };
+                readonly dementiaStage: { readonly column: 'dementia_stage' };
+                readonly emergencyContactName: { readonly column: 'emergency_contact_name' };
+                readonly emergencyContactPhone: { readonly column: 'emergency_contact_phone' };
+                readonly consentStatus: { readonly column: 'consent_status' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
+                readonly deletedAt: { readonly column: 'deleted_at' };
+              };
+            };
+          };
+          readonly SafetyCheckin: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly patientId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly deviceId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly latitude: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly longitude: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly accuracyMeters: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/numeric@1' };
+              };
+              readonly checkinType: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly syncedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly recordedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly patient: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['patientId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'safety_checkins';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly patientId: { readonly column: 'patient_id' };
+                readonly deviceId: { readonly column: 'device_id' };
+                readonly latitude: { readonly column: 'latitude' };
+                readonly longitude: { readonly column: 'longitude' };
+                readonly accuracyMeters: { readonly column: 'accuracy_meters' };
+                readonly checkinType: { readonly column: 'checkin_type' };
+                readonly syncedAt: { readonly column: 'synced_at' };
+                readonly recordedAt: { readonly column: 'recorded_at' };
+              };
+            };
+          };
+          readonly User: {
+            readonly fields: {
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly fullName: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly phone: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly email: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly role: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly passwordHash: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly preferredLanguage: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 6 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly caregiverPatients: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'CaregiverPatient';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['caregiverId'];
+                };
+              };
+              readonly dailyCareLogs: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'DailyCareLog';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['caregiverId'];
+                };
+              };
+              readonly devices: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Device';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['caregiverId'];
+                };
+              };
+              readonly patientProfile: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Patient';
+                };
+                readonly cardinality: '1:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'app_users';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly id: { readonly column: 'id' };
+                readonly fullName: { readonly column: 'full_name' };
+                readonly phone: { readonly column: 'phone' };
                 readonly email: { readonly column: 'email' };
-                readonly username: { readonly column: 'username' };
-                readonly name: { readonly column: 'name' };
-                readonly createdAt: { readonly column: 'createdAt' };
-                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly role: { readonly column: 'role' };
+                readonly passwordHash: { readonly column: 'password_hash' };
+                readonly preferredLanguage: { readonly column: 'preferred_language' };
+                readonly createdAt: { readonly column: 'created_at' };
+                readonly updatedAt: { readonly column: 'updated_at' };
               };
             };
           };
@@ -455,22 +4657,6 @@ type ContractBase = Omit<
     };
   };
   readonly extensions: {};
-  readonly execution: {
-    readonly executionHash: ExecutionHash;
-    readonly mutations: {
-      readonly defaults: readonly [
-        {
-          readonly ref: {
-            readonly namespace: 'public';
-            readonly table: 'user';
-            readonly column: 'updatedAt';
-          };
-          readonly onCreate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
-          readonly onUpdate: { readonly kind: 'generator'; readonly id: 'timestampNow' };
-        },
-      ];
-    };
-  };
   readonly meta: {};
 
   readonly profileHash: ProfileHash;

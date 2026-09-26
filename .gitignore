@@ -40,3 +40,7 @@ coverage/
 
 # Expo
 .expo/
+react-native-code.txt
+/backend/Backend.*.md
+share-code*
+backend-code.txt
